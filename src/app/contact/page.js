@@ -1,3 +1,5 @@
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
+
 export default function ContactPage() {
     return (
         <main className="max-w-xl mx-auto px-6 py-20">
@@ -51,6 +53,31 @@ export default function ContactPage() {
                     Kirim Pesan
                 </button>
             </form>
+            {/* Bagian ikon sosmed */}
+            <div className="flex justify-center gap-6 mt-10 text-2xl text-gray-600">
+                <a
+                    href="https://github.com/MakarimZufar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-black"
+                >
+                    <FaGithub />
+                </a>
+                <a
+                    href="https://linkedin.com/in/makarimzufar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-600"
+                >
+                    <FaLinkedin />
+                </a>
+                <a
+                    href="https://www.instagram.com/zufar.mkrm/"
+                    className="hover:text-red-600"
+                >
+                    <FaInstagram />
+                </a>
+            </div>
         </main>
     );
 }
