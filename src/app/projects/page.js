@@ -5,12 +5,10 @@ export default function ProjectsPage() {
                 🚧 Sedang Dibangun! 🚧
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6">
-                Seperti kode yang belum di-commit, halaman ini masih belum
-                selesai. 😅
+                Ya, proyeknya masih dalam tahap pencarian inspirasi. 🧠✨
             </p>
             <p className="text-md sm:text-lg text-gray-500 dark:text-gray-400">
-                Tenang, ini masih dalam daftar "to-do" saya. Tunggu sebentar ya!
-                🚀
+                Tunggu beberapa detik lagi setelah kopi habis. ☕😎
             </p>
         </main>
     );
