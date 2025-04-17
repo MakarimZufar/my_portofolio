@@ -1,62 +1,68 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { FaHome, FaInfoCircle, FaEnvelope, FaSuitcase } from "react-icons/fa"; // Import ikon tambahan untuk Projects
 
 export default function Navbar() {
-    const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
-        <nav className="bg-gray-900 text-white shadow-md fixed top-0 z-50 w-full">
-            <div className="max-w-5xl mx-auto flex justify-between items-center px-6 py-4">
-                {/* Judul/logo */}
-                <Link
-                    href="/"
-                    className="text-xl font-bold text-blue-400 hover:text-white transition"
+        <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-black bg-opacity-95 backdrop-blur-md p-4 rounded-lg shadow-lg w-auto">
+            <div className="container mx-auto flex justify-between items-center">
+                {/* Hamburger Menu (Mobile View) */}
+                <button
+                    onClick={toggleMenu}
+                    className="sm:hidden text-gray-900 dark:text-white"
                 >
-                    MyPortofolio
-                </Link>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-8 h-8"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        ></path>
+                    </svg>
+                </button>
 
-                {/* Menu navigasi */}
-                <div className="flex gap-6 text-sm">
+                {/* Menu Links */}
+                <div
+                    className={`sm:flex sm:gap-8 ${
+                        isOpen ? "block" : "hidden"
+                    } sm:block`}
+                >
                     <Link
                         href="/"
-                        className={
-                            pathname === "/"
-                                ? "underline text-blue-300"
-                                : "hover:text-blue-300 transition"
-                        }
+                        className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition"
                     >
-                        Home
+                        <FaHome size={24} />
                     </Link>
                     <Link
                         href="/about"
-                        className={
-                            pathname === "/about"
-                                ? "underline text-blue-300"
-                                : "hover:text-blue-300 transition"
-                        }
+                        className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition"
                     >
-                        About
+                        <FaInfoCircle size={24} />
                     </Link>
                     <Link
                         href="/projects"
-                        className={
-                            pathname === "/projects"
-                                ? "underline text-blue-300"
-                                : "hover:text-blue-300 transition"
-                        }
+                        className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition"
                     >
-                        Projects
+                        <FaSuitcase size={24} /> {/* Ikon Projects */}
                     </Link>
                     <Link
                         href="/contact"
-                        className={
-                            pathname === "/contact"
-                                ? "underline text-blue-300"
-                                : "hover:text-blue-300 transition"
-                        }
+                        className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition"
                     >
-                        Contact
+                        <FaEnvelope size={24} />
                     </Link>
                 </div>
             </div>
