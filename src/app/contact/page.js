@@ -20,7 +20,7 @@ export default function ContactPage() {
                 <input
                     type="hidden"
                     name="_next"
-                    value="http://localhost:3000/thank-you"
+                    value="https://makarimzufar.vercel.app/thank-you"
                 />
 
                 {/* Honeypot anti spam */}
