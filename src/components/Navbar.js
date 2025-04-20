@@ -1,15 +1,22 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaHome, FaInfoCircle, FaEnvelope, FaSuitcase } from "react-icons/fa";
+import {
+    FaHome,
+    FaInfoCircle,
+    FaEnvelope,
+    FaSuitcase,
+    FaSmile,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const navItems = [
     { href: "/", icon: <FaHome size={20} />, label: "Home", direction: "top" },
     {
         href: "/about",
-        icon: <FaInfoCircle size={20} />,
+        icon: <FaInfoCircle size={20} color="#fff" />,
         label: "About",
         direction: "left",
     },
@@ -27,15 +34,25 @@ const navItems = [
     },
 ];
 
+const avatarIcons = ["👨‍💻", "🚀", "😎", "☕", "📦"];
+
 export default function Navbar() {
     const pathname = usePathname();
     const clickSoundRef = useRef(null);
+    const [avatarIcon, setAvatarIcon] = useState(avatarIcons[0]);
 
     useEffect(() => {
         if (clickSoundRef.current) {
             clickSoundRef.current.volume = 0.5;
         }
     }, []);
+
+    const cycleAvatarIcon = () => {
+        setAvatarIcon((prev) => {
+            const index = avatarIcons.indexOf(prev);
+            return avatarIcons[(index + 1) % avatarIcons.length];
+        });
+    };
 
     const getInitial = (dir) => {
         switch (dir) {
@@ -67,9 +84,28 @@ export default function Navbar() {
     });
 
     return (
-        <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-4 bg-black/80 backdrop-blur-xl rounded-xl shadow-2xl border border-white/10">
+        <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-4 bg-black/80 backdrop-blur-xl rounded-full shadow-2xl border border-white/10">
             <audio ref={clickSoundRef} src="/click.mp3" preload="auto" />
-            <div className="flex gap-5">
+            <div className="flex gap-5 items-center">
+                {/* Avatar */}
+                <div
+                    onClick={() => {
+                        clickSoundRef.current?.play();
+                        cycleAvatarIcon();
+                    }}
+                    className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-all bg-white"
+                >
+                    <Image
+                        src="/boy_profile.png"
+                        alt="Avatar"
+                        fill
+                        className="rounded-full object-cover"
+                    />
+                    <span className="absolute -bottom-3 -right-3 text-sm bg-black/80 text-white px-1.5 py-0.5 rounded-full z-10">
+                        {avatarIcon}
+                    </span>
+                </div>
+
                 {navItems.map(({ href, icon, label, direction }) => {
                     const isActive = pathname === href;
 
@@ -96,28 +132,29 @@ export default function Navbar() {
                                 className={`p-3 rounded-full relative transition-all duration-500 overflow-hidden
                   ${
                       isActive
-                          ? "bg-gradient-to-br from-blue-600 to-purple-700 translate-y-1 scale-110 shadow-xl ring-2 ring-blue-500/60 animate-pulse"
-                          : "bg-white/10 hover:bg-white/20 hover:scale-105"
+                          ? "bg-gradient-to-br from-blue-600 to-purple-700 translate-y-1 scale-110 shadow-xl ring-2 ring-blue-500/60 animate-pulse border border-white/30"
+                          : "bg-white/10 hover:bg-white/20 hover:scale-[1.15] hover:translate-y-1"
                   }`}
                             >
-                                {/* Glitch Effect */}
+                                {isActive && (
+                                    <span className="absolute -inset-1 rounded-full border border-blue-400 opacity-50 blur-xl animate-glow z-0 pointer-events-none"></span>
+                                )}
+
                                 <span className="absolute inset-0 bg-white opacity-5 mix-blend-difference animate-glitch z-0 pointer-events-none"></span>
 
-                                {/* Ripple */}
                                 {isActive && (
                                     <span className="absolute inset-0 rounded-full bg-blue-500 opacity-10 animate-ripple"></span>
                                 )}
 
-                                {/* Icon */}
                                 <motion.span
                                     className={`relative z-10 text-white flex items-center justify-center 
                     ${
                         isActive
-                            ? "drop-shadow-[0_0_8px_#60a5fa]"
+                            ? "drop-shadow-[0_0_12px_#60a5fa]"
                             : "group-hover:text-blue-300"
                     }`}
                                     animate={{
-                                        scale: isActive ? 1.2 : 1,
+                                        scale: isActive ? 1.3 : 1,
                                         opacity: isActive ? 1 : 0.9,
                                     }}
                                     transition={{
@@ -130,7 +167,6 @@ export default function Navbar() {
                                     {icon}
                                 </motion.span>
 
-                                {/* Tooltip */}
                                 <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
                                     {label}
                                 </span>
@@ -140,7 +176,6 @@ export default function Navbar() {
                 })}
             </div>
 
-            {/* Keyframes for glitch and ripple */}
             <style jsx>{`
                 @keyframes glitch {
                     0% {
@@ -165,7 +200,6 @@ export default function Navbar() {
                 .animate-glitch {
                     animation: glitch 0.4s infinite;
                 }
-
                 @keyframes ripple {
                     0% {
                         transform: scale(1);
@@ -178,6 +212,20 @@ export default function Navbar() {
                 }
                 .animate-ripple {
                     animation: ripple 1s infinite;
+                }
+                @keyframes glow {
+                    0%,
+                    100% {
+                        opacity: 0.3;
+                        transform: scale(1);
+                    }
+                    50% {
+                        opacity: 0.8;
+                        transform: scale(1.05);
+                    }
+                }
+                .animate-glow {
+                    animation: glow 2s ease-in-out infinite;
                 }
             `}</style>
         </nav>
