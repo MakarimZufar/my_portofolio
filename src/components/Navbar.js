@@ -1,35 +1,29 @@
+// Full update with reorder logic only (no fade-out on previous)
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaHome, FaInfoCircle, FaEnvelope, FaSuitcase } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-const FLARE_COUNT = 7;
-const distance = 35 + Math.random() * 10;
-
-const navItems = [
-    { href: "/", icon: FaHome, label: "Home", direction: "top" },
-    { href: "/about", icon: FaInfoCircle, label: "About", direction: "left" },
-    {
-        href: "/projects",
-        icon: FaSuitcase,
-        label: "Projects",
-        direction: "bottom",
-    },
-    { href: "/contact", icon: FaEnvelope, label: "Contact", direction: "zoom" },
-];
-
 const avatarIcons = ["👨‍💻", "🚀", "😎", "☕", "🧠", "🔥"];
 
+const initialNav = [
+    { href: "/", icon: FaHome, label: "Home" },
+    { href: "/about", icon: FaInfoCircle, label: "About" },
+    { href: "/projects", icon: FaSuitcase, label: "Projects" },
+    { href: "/contact", icon: FaEnvelope, label: "Contact" },
+];
 
 export default function Navbar() {
     const pathname = usePathname();
+    const router = useRouter();
     const clickSoundRef = useRef(null);
     const [avatarIcon, setAvatarIcon] = useState(avatarIcons[0]);
     const [clicked, setClicked] = useState(false);
-    const [flareState, setFlareState] = useState("center"); // "center" | "orbit"
+    const [flareState, setFlareState] = useState("center");
+    const [navItems, setNavItems] = useState(initialNav);
 
     useEffect(() => {
         setClicked(true);
@@ -48,46 +42,24 @@ export default function Navbar() {
         setTimeout(() => setFlareState("orbit"), 300);
     };
 
-    const getInitial = (dir) => {
-        switch (dir) {
-            case "top":
-                return { y: -40, opacity: 0, scale: 0.8 };
-            case "left":
-                return { x: -40, opacity: 0, scale: 0.8 };
-            case "bottom":
-                return { y: 40, opacity: 0, scale: 0.8 };
-            case "zoom":
-                return { scale: 0, opacity: 0 };
-            default:
-                return { opacity: 0 };
-        }
+    const handleNavClick = (href) => {
+        clickSoundRef.current?.play();
+        // Reorder menu so current page pushed to end
+        setNavItems((prev) => {
+            const current = prev.find((item) => item.href === pathname);
+            const filtered = prev.filter((item) => item.href !== pathname);
+            return [...filtered, current];
+        });
+        router.push(href);
     };
-
-    const getAnimate = () => ({
-        x: 0,
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        transition: { duration: 0.5, ease: "easeOut" },
-    });
-
-    const getExit = () => ({
-        opacity: 0,
-        scale: 0.6,
-        transition: { duration: 0.3, ease: "easeIn" },
-    });
 
     return (
         <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-4 bg-black/80 backdrop-blur-xl rounded-full shadow-2xl border border-white/10">
             <audio ref={clickSoundRef} src="/click.mp3" preload="auto" />
             <div className="flex gap-5 items-center">
-                {/* Avatar */}
                 <div className="relative w-[60px] h-[60px]">
                     <div
-                        onClick={() => {
-                            clickSoundRef.current?.play();
-                            cycleAvatarIcon();
-                        }}
+                        onClick={cycleAvatarIcon}
                         className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-all bg-white relative z-10"
                     >
                         <Image
@@ -97,16 +69,13 @@ export default function Navbar() {
                             className="rounded-full object-cover"
                         />
                     </div>
-
-                    {/* Flare Orbit */}
                     {clicked && (
                         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
-                            {[...Array(FLARE_COUNT)].map((_, i) => {
-                                const angle = (i * 360) / FLARE_COUNT;
+                            {[...Array(7)].map((_, i) => {
+                                const angle = (i * 360) / 7;
                                 const distance = 40;
-                                const duration = 2 + Math.random() * 2; // antara 2 - 4 detik
-                                const delay = Math.random() * 1.5; // delay acak
-
+                                const duration = 2 + Math.random() * 2;
+                                const delay = Math.random() * 1.5;
                                 const colors = [
                                     "#00ffff",
                                     "#ff00ff",
@@ -115,7 +84,6 @@ export default function Navbar() {
                                     "#00bfff",
                                 ];
                                 const color = colors[i % colors.length];
-
                                 return (
                                     <motion.div
                                         key={`flare-${i}`}
@@ -145,17 +113,12 @@ export default function Navbar() {
                                             animationIterationCount: "infinite",
                                             animationDelay: `${delay}s`,
                                             opacity: 0.9,
-                                            transform:
-                                                flareState === "center"
-                                                    ? "translate(0, 0)"
-                                                    : `rotate(${angle}deg) translateX(${distance}px)`,
                                         }}
                                     />
                                 );
                             })}
                         </div>
                     )}
-
                     <motion.span
                         className="absolute -bottom-1.5 -right-1.5 text-2xl z-30 pointer-events-none drop-shadow-md"
                         initial={{ y: 10, opacity: 0 }}
@@ -166,31 +129,27 @@ export default function Navbar() {
                     </motion.span>
                 </div>
 
-                {/* Nav Items */}
                 {navItems.map(({ href, icon: Icon, label }, index) => {
                     const isActive = pathname === href;
-
                     return (
                         <Link
                             key={href}
                             href={href}
-                            onClick={() => clickSoundRef.current?.play()}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick(href);
+                            }}
                             className="relative group"
                         >
                             <motion.div
-                                key={
-                                    isActive
-                                        ? `active-${href}`
-                                        : `inactive-${href}`
-                                }
-                                initial={{ x: -50, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
+                                key={href}
+                                initial={{ x: -50, opacity: 0, scale: 0.8 }}
+                                animate={{ x: 0, opacity: 1, scale: 1 }}
                                 transition={{
+                                    delay: 0.1 + index * 0.1,
                                     duration: 0.5,
-                                    delay: index * 0.15,
-                                    ease: "easeOut",
+                                    ease: "easeInOut",
                                 }}
-                                exit={getExit()}
                                 className={`p-3 rounded-full relative transition-all duration-500 ${
                                     isActive
                                         ? "bg-gradient-to-br from-blue-600 to-purple-700 translate-y-1 scale-110 shadow-2xl ring-4 ring-cyan-400 border border-white/30"
@@ -206,7 +165,7 @@ export default function Navbar() {
                                 <motion.span
                                     className={`relative z-10 text-white flex items-center justify-center ${
                                         isActive
-                                            ? "text-white"
+                                            ? "text-white pulse-overlay"
                                             : "group-hover:text-blue-300"
                                     }`}
                                     animate={{
@@ -231,7 +190,6 @@ export default function Navbar() {
                 })}
             </div>
 
-            {/* Animations */}
             <style jsx>{`
                 @keyframes ripple {
                     0% {
@@ -268,13 +226,14 @@ export default function Navbar() {
                         transform: rotate(360deg) translateX(40px);
                     }
                 }
-                @keyframes flareOrbit {
-                    0% {
-                        transform: rotate(0deg) translateX(40px);
-                    }
-                    100% {
-                        transform: rotate(360deg) translateX(40px);
-                    }
+                .pulse-overlay {
+                    background: radial-gradient(
+                        circle at center,
+                        rgba(255, 255, 255, 0.3) 40%,
+                        transparent 70%
+                    );
+                    border-radius: 9999px;
+                    padding: 4px;
                 }
             `}</style>
         </nav>
