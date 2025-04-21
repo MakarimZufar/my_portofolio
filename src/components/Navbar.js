@@ -167,7 +167,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Nav Items */}
-                {navItems.map(({ href, icon: Icon, label, direction }) => {
+                {navItems.map(({ href, icon: Icon, label }, index) => {
                     const isActive = pathname === href;
 
                     return (
@@ -183,8 +183,13 @@ export default function Navbar() {
                                         ? `active-${href}`
                                         : `inactive-${href}`
                                 }
-                                initial={getInitial(direction)}
-                                animate={getAnimate()}
+                                initial={{ x: -50, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{
+                                    duration: 0.5,
+                                    delay: index * 0.15,
+                                    ease: "easeOut",
+                                }}
                                 exit={getExit()}
                                 className={`p-3 rounded-full relative transition-all duration-500 ${
                                     isActive
