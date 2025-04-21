@@ -142,6 +142,7 @@ export default function Navbar() {
                             className="relative group"
                         >
                             <motion.div
+                                layout
                                 key={href}
                                 initial={{ x: -50, opacity: 0, scale: 0.8 }}
                                 animate={{ x: 0, opacity: 1, scale: 1 }}
