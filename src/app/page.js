@@ -113,7 +113,7 @@ export default function HomePage() {
                         transition={{ delay: 1, duration: 1 }}
                         className="text-base sm:text-lg text-gray-300 max-w-xl"
                     >
-                        I'm a passionate Computer Science student at the
+                        I&apos;m a passionate Computer Science student at the
                         University of Indonesia, striving to become a proficient
                         Full Stack Developer. I focus on mastering both frontend
                         and backend technologies to craft impactful digital
@@ -126,7 +126,7 @@ export default function HomePage() {
                         transition={{ delay: 1.5, duration: 1 }}
                         className="italic text-sm text-gray-500"
                     >
-                        "Code. Coffee. Repeat."
+                        &quot;Code. Coffee. Repeat.&quot;
                     </motion.p>
 
                     <div className="flex flex-wrap justify-center gap-4 mt-6">
@@ -168,9 +168,9 @@ export default function HomePage() {
                     className="text-gray-400"
                 >
                     I enjoy turning complex problems into simple, beautiful, and
-                    intuitive designs. When I'm not coding, you'll find me
-                    exploring UI trends, learning new frameworks, or sipping a
-                    good cup of coffee.
+                    intuitive designs. When I&apos;m not coding, you&apos;ll
+                    find me exploring UI trends, learning new frameworks, or
+                    sipping a good cup of coffee.
                 </motion.p>
             </section>
 
