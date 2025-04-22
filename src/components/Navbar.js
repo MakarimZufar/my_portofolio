@@ -1,4 +1,4 @@
-// Full update with reorder logic only (no fade-out on previous)
+// Updated spiral effect from edges inward (spiral-in)
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const avatarIcons = ["👨‍💻", "🚀", "😎", "☕", "🧠", "🔥"];
+const avatarImages = ["/boy_profile.png", "/boy_profile_2.png"];
 
 const initialNav = [
     { href: "/", icon: FaHome, label: "Home" },
@@ -21,15 +22,33 @@ export default function Navbar() {
     const router = useRouter();
     const clickSoundRef = useRef(null);
     const [avatarIcon, setAvatarIcon] = useState(avatarIcons[0]);
-    const [clicked, setClicked] = useState(false);
+    const [avatarIndex, setAvatarIndex] = useState(0);
     const [flareState, setFlareState] = useState("center");
-    const [navItems, setNavItems] = useState(initialNav);
+    const [navItems, setNavItems] = useState([]);
+    const [lensActive, setLensActive] = useState(false);
 
     useEffect(() => {
-        setClicked(true);
+        let delay = 0;
+        initialNav.forEach((item, index) => {
+            setTimeout(() => {
+                setNavItems((prev) => [...prev, item]);
+            }, delay);
+            delay += 200;
+        });
         setFlareState("center");
         const timeout = setTimeout(() => setFlareState("orbit"), 300);
         return () => clearTimeout(timeout);
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setLensActive(true);
+            setTimeout(() => {
+                setAvatarIndex((prev) => (prev + 1) % avatarImages.length);
+                setLensActive(false);
+            }, 800);
+        }, 4000);
+        return () => clearInterval(interval);
     }, []);
 
     const cycleAvatarIcon = () => {
@@ -37,158 +56,122 @@ export default function Navbar() {
             const index = avatarIcons.indexOf(prev);
             return avatarIcons[(index + 1) % avatarIcons.length];
         });
-        setClicked(true);
-        setFlareState("center");
-        setTimeout(() => setFlareState("orbit"), 300);
     };
 
     const handleNavClick = (href) => {
         clickSoundRef.current?.play();
-        // Reorder menu so current page pushed to end
-        setNavItems((prev) => {
-            const current = prev.find((item) => item.href === pathname);
-            const filtered = prev.filter((item) => item.href !== pathname);
-            return [...filtered, current];
-        });
-        router.push(href);
+        const current = navItems.find((item) => item.href === pathname);
+        setTimeout(() => {
+            setNavItems((prev) => {
+                const filtered = prev.filter((item) => item.href !== pathname);
+                return [...filtered, current];
+            });
+            router.push(href);
+        }, 400);
     };
 
     return (
         <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-4 bg-black/80 backdrop-blur-xl rounded-full shadow-2xl border border-white/10">
             <audio ref={clickSoundRef} src="/click.mp3" preload="auto" />
-            <div className="flex gap-5 items-center">
+            <div className="flex items-center gap-6">
                 <div className="relative w-[60px] h-[60px]">
                     <div
                         onClick={cycleAvatarIcon}
                         className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-all bg-white relative z-10"
                     >
                         <Image
-                            src="/boy_profile.png"
+                            key={avatarIndex}
+                            src={avatarImages[avatarIndex]}
                             alt="Avatar"
                             fill
-                            className="rounded-full object-cover"
+                            className={`rounded-full object-cover transition-opacity duration-300 ${
+                                lensActive ? "opacity-0" : "opacity-100"
+                            }`}
                         />
+                        {lensActive && (
+                            <div className="absolute inset-0 z-20 spiral-in-mask"></div>
+                        )}
                     </div>
-                    {clicked && (
-                        <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
-                            {[...Array(7)].map((_, i) => {
-                                const angle = (i * 360) / 7;
-                                const distance = 40;
-                                const duration = 2 + Math.random() * 2;
-                                const delay = Math.random() * 1.5;
-                                const colors = [
-                                    "#00ffff",
-                                    "#ff00ff",
-                                    "#00ff00",
-                                    "#ffa500",
-                                    "#00bfff",
-                                ];
-                                const color = colors[i % colors.length];
-                                return (
-                                    <motion.div
-                                        key={`flare-${i}`}
-                                        className="absolute rounded-full"
-                                        animate={{
-                                            transform:
-                                                flareState === "center"
-                                                    ? "translate(0, 0)"
-                                                    : `rotate(${angle}deg) translateX(${distance}px)`,
-                                        }}
-                                        transition={{
-                                            duration: 0.4,
-                                            ease: "easeOut",
-                                        }}
-                                        style={{
-                                            width: `${3 + (i % 3)}px`,
-                                            height: `${3 + (i % 3)}px`,
-                                            backgroundColor: color,
-                                            boxShadow: `0 0 6px ${color}, 0 0 10px ${color}`,
-                                            transformOrigin: "center",
-                                            animationName:
-                                                flareState === "orbit"
-                                                    ? "flareOrbit"
-                                                    : "none",
-                                            animationDuration: `${duration}s`,
-                                            animationTimingFunction: "linear",
-                                            animationIterationCount: "infinite",
-                                            animationDelay: `${delay}s`,
-                                            opacity: 0.9,
-                                        }}
-                                    />
-                                );
-                            })}
-                        </div>
-                    )}
+
                     <motion.span
                         className="absolute -bottom-1.5 -right-1.5 text-2xl z-30 pointer-events-none drop-shadow-md"
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 300 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            delay: 2,
+                        }}
                     >
                         {avatarIcon}
                     </motion.span>
                 </div>
 
-                {navItems.map(({ href, icon: Icon, label }, index) => {
-                    const isActive = pathname === href;
-                    return (
-                        <Link
-                            key={href}
-                            href={href}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleNavClick(href);
-                            }}
-                            className="relative group"
-                        >
+                <AnimatePresence mode="popLayout">
+                    {navItems.map(({ href, icon: Icon, label }, index) => {
+                        const isActive = pathname === href;
+                        return (
                             <motion.div
-                                layout
                                 key={href}
-                                initial={{ x: -50, opacity: 0, scale: 0.8 }}
-                                animate={{ x: 0, opacity: 1, scale: 1 }}
+                                layout
+                                initial={{ x: -80, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ y: 60, scale: 0.95, opacity: 1 }}
                                 transition={{
-                                    delay: 0.1 + index * 0.1,
+                                    delay: index * 0.2,
                                     duration: 0.5,
-                                    ease: "easeInOut",
+                                    ease: "easeOut",
                                 }}
-                                className={`p-3 rounded-full relative transition-all duration-500 ${
-                                    isActive
-                                        ? "bg-gradient-to-br from-blue-600 to-purple-700 translate-y-1 scale-110 shadow-2xl ring-4 ring-cyan-400 border border-white/30"
-                                        : "bg-white/10 hover:bg-white/20 hover:scale-[1.15] hover:translate-y-1"
-                                }`}
                             >
-                                {isActive && (
-                                    <span className="absolute -inset-1 rounded-full border-2 border-cyan-300 opacity-70 blur-xl animate-glow z-0 pointer-events-none" />
-                                )}
-                                {isActive && (
-                                    <span className="absolute inset-0 rounded-full bg-blue-400 opacity-30 animate-ripple" />
-                                )}
-                                <motion.span
-                                    className={`relative z-10 text-white flex items-center justify-center ${
-                                        isActive
-                                            ? "text-white pulse-overlay"
-                                            : "group-hover:text-blue-300"
-                                    }`}
-                                    animate={{
-                                        scale: isActive ? 1.3 : 1,
-                                        opacity: isActive ? 1 : 0.9,
+                                <Link
+                                    href={href}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleNavClick(href);
                                     }}
-                                    transition={{
-                                        repeat: Infinity,
-                                        repeatType: "mirror",
-                                        duration: 2,
-                                        ease: "easeInOut",
-                                    }}
+                                    className="relative group"
                                 >
-                                    <Icon size={22} />
-                                </motion.span>
-                                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
-                                    {label}
-                                </span>
+                                    <div
+                                        className={`p-3 rounded-full relative transition-all duration-500 ${
+                                            isActive
+                                                ? "bg-gradient-to-br from-blue-600 to-purple-700 translate-y-1 scale-110 shadow-2xl ring-4 ring-cyan-400 border border-white/30"
+                                                : "bg-white/10 hover:bg-white/20 hover:scale-[1.15] hover:translate-y-1"
+                                        }`}
+                                    >
+                                        {isActive && (
+                                            <span className="absolute -inset-1 rounded-full border-2 border-cyan-300 opacity-70 blur-xl animate-glow z-0 pointer-events-none" />
+                                        )}
+                                        {isActive && (
+                                            <span className="absolute inset-0 rounded-full bg-blue-400 opacity-30 animate-ripple" />
+                                        )}
+                                        <motion.span
+                                            className={`relative z-10 text-white flex items-center justify-center ${
+                                                isActive
+                                                    ? "text-white pulse-overlay"
+                                                    : "group-hover:text-blue-300"
+                                            }`}
+                                            animate={{
+                                                scale: isActive ? 1.3 : 1,
+                                                opacity: isActive ? 1 : 0.9,
+                                            }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                repeatType: "mirror",
+                                                duration: 4,
+                                                ease: "easeInOut",
+                                            }}
+                                        >
+                                            <Icon size={22} />
+                                        </motion.span>
+                                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
+                                            {label}
+                                        </span>
+                                    </div>
+                                </Link>
                             </motion.div>
-                        </Link>
-                    );
-                })}
+                        );
+                    })}
+                </AnimatePresence>
             </div>
 
             <style jsx>{`
@@ -235,6 +218,21 @@ export default function Navbar() {
                     );
                     border-radius: 9999px;
                     padding: 4px;
+                }
+                .spiral-in-mask {
+                    background: conic-gradient(black 0deg, black 360deg);
+                    animation: spiralInCover 0.8s ease-in-out forwards;
+                    clip-path: circle(100%);
+                }
+                @keyframes spiralInCover {
+                    0% {
+                        transform: rotate(0deg) scale(1);
+                        clip-path: circle(100%);
+                    }
+                    100% {
+                        transform: rotate(1080deg) scale(0);
+                        clip-path: circle(0%);
+                    }
                 }
             `}</style>
         </nav>
