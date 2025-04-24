@@ -1,4 +1,4 @@
-// Updated spiral effect from edges inward (spiral-in)
+// Updated spiral effect from edges inward (spiral-in) - Smooth Avatar Transition Fix
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -7,7 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-const avatarIcons = ["👨‍💻", "🚀", "😎", "☕", "🧠", "🔥"];
+const avatarIcons = [
+    "\u{1F468}\u200D\u{1F4BB}",
+    "\u{1F680}",
+    "\u{1F60E}",
+    "\u{2615}",
+    "\u{1F9E0}",
+    "\u{1F525}",
+];
 const avatarImages = ["/boy_profile.png", "/boy_profile_2.png"];
 
 const initialNav = [
@@ -26,6 +33,7 @@ export default function Navbar() {
     const [flareState, setFlareState] = useState("center");
     const [navItems, setNavItems] = useState([]);
     const [lensActive, setLensActive] = useState(false);
+    const [pendingIndex, setPendingIndex] = useState(null);
 
     useEffect(() => {
         let delay = 0;
@@ -42,14 +50,15 @@ export default function Navbar() {
 
     useEffect(() => {
         const interval = setInterval(() => {
+            setPendingIndex((prev) => (avatarIndex + 1) % avatarImages.length);
             setLensActive(true);
             setTimeout(() => {
-                setAvatarIndex((prev) => (prev + 1) % avatarImages.length);
+                setAvatarIndex(pendingIndex);
                 setLensActive(false);
             }, 800);
         }, 4000);
         return () => clearInterval(interval);
-    }, []);
+    }, [avatarIndex, pendingIndex]);
 
     const cycleAvatarIcon = () => {
         setAvatarIcon((prev) => {
@@ -75,24 +84,30 @@ export default function Navbar() {
             <audio ref={clickSoundRef} src="/click.mp3" preload="auto" />
             <div className="flex items-center gap-6">
                 <div className="relative w-[60px] h-[60px]">
-                    <div
-                        onClick={cycleAvatarIcon}
+                    <motion.div
+                        key={avatarIndex}
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.4 }}
                         className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-all bg-white relative z-10"
+                        onClick={cycleAvatarIcon}
                     >
                         <Image
-                            key={avatarIndex}
-                            src={avatarImages[avatarIndex]}
+                            src={
+                                avatarImages[
+                                    pendingIndex !== null
+                                        ? pendingIndex
+                                        : avatarIndex
+                                ]
+                            }
                             alt="Avatar"
                             fill
-                            className={`rounded-full object-cover transition-opacity duration-300 ${
-                                lensActive ? "opacity-0" : "opacity-100"
-                            }`}
+                            className="object-cover rounded-full transition-all duration-300"
                         />
                         {lensActive && (
                             <div className="absolute inset-0 z-20 spiral-in-mask"></div>
                         )}
-                    </div>
-
+                    </motion.div>
                     <motion.span
                         className="absolute -bottom-1.5 -right-1.5 text-2xl z-30 pointer-events-none drop-shadow-md"
                         initial={{ y: 10, opacity: 0 }}
@@ -201,14 +216,6 @@ export default function Navbar() {
                 }
                 .animate-glow {
                     animation: glow 2s ease-in-out infinite;
-                }
-                @keyframes flareOrbit {
-                    0% {
-                        transform: rotate(0deg) translateX(40px);
-                    }
-                    100% {
-                        transform: rotate(360deg) translateX(40px);
-                    }
                 }
                 .pulse-overlay {
                     background: radial-gradient(
