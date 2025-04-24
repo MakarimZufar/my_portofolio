@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 const helloGreetings = [
     "Hello.",
@@ -97,15 +97,15 @@ export default function HomePage() {
         setTimeout(() => {
             setCanHover(true);
             setIsHovered(false);
-        }, 30000); // 30 detik
+        }, 30000);
     };
 
     return (
         <main className="relative pt-48 flex flex-col items-center px-6 sm:px-20 py-16 gap-24 text-white overflow-hidden">
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-indigo-900 via-black to-gray-900 animate-background-pan"></div>
+            <div className="absolute inset-0 -z-10 animate-futuristic-background"></div>
+            <div className="absolute inset-0 -z-20 bg-gradient-to-tr from-[#0f0c29]/40 via-[#302b63]/30 to-[#24243e]/40"></div>
 
             <div className="relative w-full max-w-4xl aspect-[4/3]">
-                {/* Hover Layer - only top 80% to allow click & hover on bottom buttons */}
                 <div
                     className="absolute top-0 left-0 right-0 h-[80%] z-20"
                     onMouseEnter={handleHover}
@@ -195,20 +195,36 @@ export default function HomePage() {
             </div>
 
             <style jsx>{`
-                @keyframes background-pan {
+                @keyframes futuristicBackground {
                     0% {
-                        background-position: 0% 50%;
+                        background: linear-gradient(
+                            135deg,
+                            #0f0c29,
+                            #302b63,
+                            #24243e
+                        );
                     }
                     50% {
-                        background-position: 100% 50%;
+                        background: linear-gradient(
+                            135deg,
+                            #1a1a2e,
+                            #16213e,
+                            #0f3460
+                        );
                     }
                     100% {
-                        background-position: 0% 50%;
+                        background: linear-gradient(
+                            135deg,
+                            #0f0c29,
+                            #302b63,
+                            #24243e
+                        );
                     }
                 }
-                .animate-background-pan {
+                .animate-futuristic-background {
+                    animation: futuristicBackground 40s ease infinite;
                     background-size: 400% 400%;
-                    animation: background-pan 15s ease infinite;
+                    background-position: center;
                 }
             `}</style>
         </main>
