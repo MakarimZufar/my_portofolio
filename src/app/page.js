@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const helloGreetings = [
     "Hello.",
@@ -32,6 +32,7 @@ const contactMessages = [
 ];
 
 export default function HomePage() {
+    // Original state variables for animations
     const [helloText, setHelloText] = useState("");
     const [helloIndex, setHelloIndex] = useState(0);
     const [isDeletingHello, setIsDeletingHello] = useState(false);
@@ -39,11 +40,15 @@ export default function HomePage() {
     const [isDeleting, setIsDeleting] = useState(false);
     const [roleIndex, setRoleIndex] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);
-    const [isHovered, setIsHovered] = useState(false);
-    const [canHover, setCanHover] = useState(true);
 
+    // New card state management
+    const [cardState, setCardState] = useState("front"); // 'front', 'back', 'buttonHover'
+    const cardRef = useRef(null);
+
+    // Typing animation for hello greeting
     useEffect(() => {
-        if (isHovered) return;
+        if (cardState !== "front") return; // Only animate when card is showing front
+
         const current = helloGreetings[helloIndex];
         const speed = isDeletingHello ? 80 : 150;
         const timeout = setTimeout(() => {
@@ -61,8 +66,9 @@ export default function HomePage() {
             }
         }, speed);
         return () => clearTimeout(timeout);
-    }, [helloText, isDeletingHello, helloIndex, isHovered]);
+    }, [helloText, isDeletingHello, helloIndex, cardState]);
 
+    // Typing animation for roles
     useEffect(() => {
         const current = roles[roleIndex];
         let typingSpeed = isDeleting ? 50 : 100;
@@ -83,6 +89,7 @@ export default function HomePage() {
         return () => clearTimeout(type);
     }, [typedRole, isDeleting, roleIndex]);
 
+    // Contact message cycling
     useEffect(() => {
         const msgInterval = setInterval(() => {
             setMessageIndex((prev) => (prev + 1) % contactMessages.length);
@@ -90,14 +97,41 @@ export default function HomePage() {
         return () => clearInterval(msgInterval);
     }, []);
 
-    const handleHover = () => {
-        if (!canHover) return;
-        setIsHovered(true);
-        setCanHover(false);
-        setTimeout(() => {
-            setCanHover(true);
-            setIsHovered(false);
-        }, 30000);
+    // Card interaction handlers
+    const handleCardHover = () => {
+        if (cardState === "front") {
+            setCardState("back");
+        }
+    };
+
+    const handleCardLeave = () => {
+        // Only flip back if not hovering over a button
+        if (cardState !== "buttonHover") {
+            setCardState("front");
+        }
+    };
+
+    const handleButtonHover = () => {
+        setCardState("buttonHover");
+    };
+
+    const handleButtonLeave = () => {
+        // Check if mouse is still within the card boundaries
+        if (cardRef.current) {
+            const cardRect = cardRef.current.getBoundingClientRect();
+            const { clientX, clientY } = window.event;
+
+            if (
+                clientX >= cardRect.left &&
+                clientX <= cardRect.right &&
+                clientY >= cardRect.top &&
+                clientY <= cardRect.bottom
+            ) {
+                setCardState("back");
+            } else {
+                setCardState("front");
+            }
+        }
     };
 
     return (
@@ -105,22 +139,22 @@ export default function HomePage() {
             <div className="absolute inset-0 -z-10 animate-futuristic-background"></div>
             <div className="absolute inset-0 -z-20 bg-gradient-to-tr from-[#0f0c29]/40 via-[#302b63]/30 to-[#24243e]/40"></div>
 
-            <div className="relative w-full max-w-4xl aspect-[4/3]">
+            <div
+                ref={cardRef}
+                className="relative w-full max-w-4xl aspect-[4/3]"
+                onMouseLeave={handleCardLeave}
+            >
+                {/* Hover overlay - pointer events controlled by state */}
                 <div
-                    className="absolute top-0 left-0 right-0 h-[80%] z-20"
-                    onMouseEnter={handleHover}
-                    onClick={() => {
-                        if (isHovered) {
-                            const btn =
-                                document.getElementById("view-projects-btn");
-                            if (btn) btn.click();
-                        }
-                    }}
+                    className={`absolute top-0 left-0 right-0 h-full z-20 ${
+                        cardState !== "front" ? "pointer-events-none" : ""
+                    }`}
+                    onMouseEnter={handleCardHover}
                 ></div>
 
                 <div
                     className={`w-full h-full transition-transform duration-[1800ms] ease-[cubic-bezier(0.77,0,0.175,1)] [transform-style:preserve-3d] rounded-3xl ${
-                        isHovered
+                        cardState !== "front"
                             ? "[transform:rotateY(180deg)_scale(1.05)]"
                             : ""
                     }`}
@@ -147,7 +181,11 @@ export default function HomePage() {
 
                         <motion.h2
                             initial={{ opacity: 0, scale: 0.8 }}
-                            animate={isHovered ? { opacity: 1, scale: 1 } : {}}
+                            animate={
+                                cardState !== "front"
+                                    ? { opacity: 1, scale: 1 }
+                                    : {}
+                            }
                             transition={{ duration: 0.6, delay: 0.3 }}
                             className="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 drop-shadow-xl tracking-wide text-center"
                         >
@@ -157,7 +195,11 @@ export default function HomePage() {
                         <motion.h3
                             className="text-lg sm:text-xl font-mono text-cyan-400 h-6 min-h-[1.5rem]"
                             initial={{ opacity: 0, x: -30 }}
-                            animate={isHovered ? { opacity: 1, x: 0 } : {}}
+                            animate={
+                                cardState !== "front"
+                                    ? { opacity: 1, x: 0 }
+                                    : {}
+                            }
                             transition={{ duration: 0.5, delay: 0.4 }}
                         >
                             I&apos;m a {typedRole}
@@ -177,12 +219,16 @@ export default function HomePage() {
                                 id="view-projects-btn"
                                 href="/projects"
                                 className="px-6 py-2 rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:shadow-[0_10px_20px_rgba(0,132,255,0.6)]"
+                                onMouseEnter={handleButtonHover}
+                                onMouseLeave={handleButtonLeave}
                             >
                                 🚀 View Projects
                             </Link>
                             <Link
                                 href="/contact"
                                 className="relative group px-6 py-2 rounded-full border border-blue-500 text-white bg-transparent shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:shadow-[0_10px_20px_rgba(0,255,255,0.5)]"
+                                onMouseEnter={handleButtonHover}
+                                onMouseLeave={handleButtonLeave}
                             >
                                 <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm rounded-full"></span>
                                 <span className="relative z-10 font-medium inline-block">
@@ -225,6 +271,11 @@ export default function HomePage() {
                     animation: futuristicBackground 40s ease infinite;
                     background-size: 400% 400%;
                     background-position: center;
+                }
+
+                /* Add pointer-events utility classes */
+                .pointer-events-none {
+                    pointer-events: none;
                 }
             `}</style>
         </main>
