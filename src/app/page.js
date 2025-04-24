@@ -32,7 +32,6 @@ const contactMessages = [
 ];
 
 export default function HomePage() {
-    // Original state variables for animations
     const [helloText, setHelloText] = useState("");
     const [helloIndex, setHelloIndex] = useState(0);
     const [isDeletingHello, setIsDeletingHello] = useState(false);
@@ -40,15 +39,11 @@ export default function HomePage() {
     const [isDeleting, setIsDeleting] = useState(false);
     const [roleIndex, setRoleIndex] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);
-
-    // New card state management
-    const [cardState, setCardState] = useState("front"); // 'front', 'back', 'buttonHover'
+    const [cardState, setCardState] = useState("front");
     const cardRef = useRef(null);
 
-    // Typing animation for hello greeting
     useEffect(() => {
-        if (cardState !== "front") return; // Only animate when card is showing front
-
+        if (cardState !== "front") return;
         const current = helloGreetings[helloIndex];
         const speed = isDeletingHello ? 80 : 150;
         const timeout = setTimeout(() => {
@@ -57,7 +52,6 @@ export default function HomePage() {
                     ? current.substring(0, prev.length - 1)
                     : current.substring(0, prev.length + 1)
             );
-
             if (!isDeletingHello && helloText === current) {
                 setTimeout(() => setIsDeletingHello(true), 1000);
             } else if (isDeletingHello && helloText === "") {
@@ -68,47 +62,38 @@ export default function HomePage() {
         return () => clearTimeout(timeout);
     }, [helloText, isDeletingHello, helloIndex, cardState]);
 
-    // Typing animation for roles
     useEffect(() => {
         const current = roles[roleIndex];
-        let typingSpeed = isDeleting ? 50 : 100;
-        const type = setTimeout(() => {
+        const speed = isDeleting ? 50 : 100;
+        const timeout = setTimeout(() => {
             setTypedRole((prev) =>
                 isDeleting
                     ? current.substring(0, prev.length - 1)
                     : current.substring(0, prev.length + 1)
             );
-
             if (!isDeleting && typedRole === current) {
                 setTimeout(() => setIsDeleting(true), 1000);
             } else if (isDeleting && typedRole === "") {
                 setIsDeleting(false);
                 setRoleIndex((prev) => (prev + 1) % roles.length);
             }
-        }, typingSpeed);
-        return () => clearTimeout(type);
+        }, speed);
+        return () => clearTimeout(timeout);
     }, [typedRole, isDeleting, roleIndex]);
 
-    // Contact message cycling
     useEffect(() => {
-        const msgInterval = setInterval(() => {
+        const interval = setInterval(() => {
             setMessageIndex((prev) => (prev + 1) % contactMessages.length);
         }, 3000);
-        return () => clearInterval(msgInterval);
+        return () => clearInterval(interval);
     }, []);
 
-    // Card interaction handlers
     const handleCardHover = () => {
-        if (cardState === "front") {
-            setCardState("back");
-        }
+        if (cardState === "front") setCardState("back");
     };
 
     const handleCardLeave = () => {
-        // Only flip back if not hovering over a button
-        if (cardState !== "buttonHover") {
-            setCardState("front");
-        }
+        if (cardState !== "buttonHover") setCardState("front");
     };
 
     const handleButtonHover = () => {
@@ -116,16 +101,15 @@ export default function HomePage() {
     };
 
     const handleButtonLeave = () => {
-        // Check if mouse is still within the card boundaries
         if (cardRef.current) {
-            const cardRect = cardRef.current.getBoundingClientRect();
+            const { left, right, top, bottom } =
+                cardRef.current.getBoundingClientRect();
             const { clientX, clientY } = window.event;
-
             if (
-                clientX >= cardRect.left &&
-                clientX <= cardRect.right &&
-                clientY >= cardRect.top &&
-                clientY <= cardRect.bottom
+                clientX >= left &&
+                clientX <= right &&
+                clientY >= top &&
+                clientY <= bottom
             ) {
                 setCardState("back");
             } else {
@@ -144,7 +128,6 @@ export default function HomePage() {
                 className="relative w-full max-w-4xl aspect-[4/3]"
                 onMouseLeave={handleCardLeave}
             >
-                {/* Hover overlay - pointer events controlled by state */}
                 <div
                     className={`absolute top-0 left-0 right-0 h-full z-20 ${
                         cardState !== "front" ? "pointer-events-none" : ""
@@ -159,15 +142,13 @@ export default function HomePage() {
                             : ""
                     }`}
                 >
-                    {/* Front Side */}
                     <div className="absolute inset-0 bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10 rounded-3xl flex flex-col items-center justify-center [backface-visibility:hidden]">
-                        <motion.h1 className="text-6xl sm:text-7xl font-extrabold text-white font-[HelveticaNeue] text-center">
+                        <motion.h1 className="text-6xl sm:text-7xl font-bold text-white font-[Pacifico] text-center">
                             {helloText}
                             <span className="animate-pulse">|</span>
                         </motion.h1>
                     </div>
 
-                    {/* Back Side */}
                     <div className="absolute inset-0 bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10 rounded-3xl p-8 flex flex-col items-center justify-center gap-6 [transform:rotateY(180deg)] [backface-visibility:hidden]">
                         <div className="p-1 rounded-full bg-gradient-to-tr from-cyan-400 to-purple-600 animate-pulse shadow-lg">
                             <Image
@@ -178,7 +159,6 @@ export default function HomePage() {
                                 className="rounded-full border-4 border-white dark:border-gray-700 shadow-xl"
                             />
                         </div>
-
                         <motion.h2
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={
@@ -191,7 +171,6 @@ export default function HomePage() {
                         >
                             Makarim Zufar Prambudyo
                         </motion.h2>
-
                         <motion.h3
                             className="text-lg sm:text-xl font-mono text-cyan-400 h-6 min-h-[1.5rem]"
                             initial={{ opacity: 0, x: -30 }}
@@ -205,7 +184,6 @@ export default function HomePage() {
                             I&apos;m a {typedRole}
                             <span className="animate-ping ml-1">|</span>
                         </motion.h3>
-
                         <p className="text-base sm:text-lg text-gray-300 max-w-xl text-center">
                             I&apos;m a passionate Computer Science student at
                             the University of Indonesia, striving to become a
@@ -213,7 +191,6 @@ export default function HomePage() {
                             mastering both frontend and backend technologies to
                             craft impactful digital experiences.
                         </p>
-
                         <div className="flex flex-wrap justify-center gap-4 mt-4">
                             <Link
                                 id="view-projects-btn"
@@ -239,8 +216,8 @@ export default function HomePage() {
                     </div>
                 </div>
             </div>
-
             <style jsx>{`
+                @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
                 @keyframes futuristicBackground {
                     0% {
                         background: linear-gradient(
@@ -271,11 +248,6 @@ export default function HomePage() {
                     animation: futuristicBackground 40s ease infinite;
                     background-size: 400% 400%;
                     background-position: center;
-                }
-
-                /* Add pointer-events utility classes */
-                .pointer-events-none {
-                    pointer-events: none;
                 }
             `}</style>
         </main>
