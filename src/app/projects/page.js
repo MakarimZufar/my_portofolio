@@ -7,7 +7,7 @@ import { SiGithub, SiGlobus } from "react-icons/si";
 import TechBadge from "@/components/TechBadge";
 
 // Data proyek
-const projects = [
+export const projects = [
     {
         id: "my-portfolio",
         title: "My-Portfolio",
@@ -47,7 +47,7 @@ const projects = [
         technologies: ["React", "Firebase", "Tailwind", "JavaScript"],
         demoUrl: "https://otwcuy.web.app",
         githubUrl: "https://github.com/MakarimZufar/otwcuy",
-        featured: true,
+        featured: false,
         category: "app",
     },
     // Tambahkan proyek lain di sini

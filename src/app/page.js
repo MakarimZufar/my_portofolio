@@ -112,7 +112,7 @@ export default function HomePage() {
     };
 
     return (
-        <main className="text-white overflow-x-hidden">
+        <main className="text-white overflow-x-hidden bg-gradient-to-b from-transparent via-[#0f0c29]/70 to-black min-h-screen">
             <section className="relative h-screen flex flex-col items-center justify-center px-6 sm:px-20">
                 <div className="absolute inset-0 -z-10 animate-futuristic-background" />
                 <div className="absolute inset-0 -z-20 bg-gradient-to-tr from-[#0f0c29]/40 via-[#302b63]/30 to-[#24243e]/40" />
@@ -221,10 +221,8 @@ export default function HomePage() {
             <section className="pt-24 pb-32 px-6 sm:px-20 flex flex-col items-center gap-24">
                 <TechLayeredCarousel />
             </section>
-            
-            <FeaturedProjects />
 
-            
+            <FeaturedProjects />
 
             <style jsx>{`
                 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
