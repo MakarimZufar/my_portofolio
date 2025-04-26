@@ -142,7 +142,7 @@ export default function HomePage() {
                         <div className="absolute inset-0 bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10 rounded-3xl p-8 flex flex-col items-center justify-center gap-6 [transform:rotateY(180deg)] [backface-visibility:hidden]">
                             <div className="p-1 rounded-full bg-gradient-to-tr from-cyan-400 to-purple-600 animate-pulse shadow-lg">
                                 <Image
-                                    src="/boy_profile.png"
+                                    src="/profile_image/boy_profile.png"
                                     alt="My Photo"
                                     width={150}
                                     height={150}
