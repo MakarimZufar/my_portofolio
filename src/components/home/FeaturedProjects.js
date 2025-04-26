@@ -4,7 +4,6 @@ import TechBadge from "@/components/home/TechBadge";
 import { projects } from "@/app/projects/page";
 
 export default function FeaturedProjects() {
-    // Filter proyek yang memiliki properti featured: true
     const featuredProjects = projects.filter((project) => project.featured);
 
     return (
