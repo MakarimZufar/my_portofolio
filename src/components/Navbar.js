@@ -15,7 +15,7 @@ const avatarIcons = [
     "\u{1F9E0}",
     "\u{1F525}",
 ];
-const avatarImages = ["/boy_profile.png", "/boy_profile_2.png"];
+const avatarImages = ["/profile_image/boy_profile.png", "/profile_image/boy_profile_2.png"];
 
 const initialNav = [
     { href: "/", icon: FaHome, label: "Home" },
