@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+.futuristicBackground {
+    animation: futuristicBackground 40s ease infinite;
+    background-size: 400% 400%;
+    background-position: center;
+}
+
+.scrollbarHide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbarHide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+@keyframes futuristicBackground {
+    0% {
+        background: linear-gradient(
+            135deg,
+            #0f0c29,
+            #302b63,
+            #24243e
+        );
+    }
+    50% {
+        background: linear-gradient(
+            135deg,
+            #1a1a2e,
+            #16213e,
+            #0f3460
+        );
+    }
+    100% {
+        background: linear-gradient(
+            135deg,
+            #0f0c29,
+            #302b63,
+            #24243e
+        );
+    }
+}

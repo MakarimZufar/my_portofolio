@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
-import TechBadge from "@/components/TechBadge";
+import TechBadge from "@/components/home/TechBadge";
 import { projects } from "@/app/projects/page";
 
 export default function FeaturedProjects() {

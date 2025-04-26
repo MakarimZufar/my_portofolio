@@ -1,0 +1,62 @@
+/* src/components/IntroCard/IntroCard.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+.flipCard {
+    transform-style: preserve-3d;
+    transition-duration: 1800ms;
+    transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.flipCardFlipped {
+    transform: rotateY(180deg) scale(1.05);
+}
+
+.cardFace {
+    backface-visibility: hidden;
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-radius: 1.5rem;
+    ring: 1px rgba(255, 255, 255, 0.1);
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.cardFront {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.cardBack {
+    transform: rotateY(180deg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.nameTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background-image: linear-gradient(to right, #facc15, #db2777, #a855f7);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .nameTitle {
+        font-size: 3rem;
+    }
+}

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { SiGithub, SiGlobus } from "react-icons/si";
-import TechBadge from "@/components/TechBadge";
+import TechBadge from "@/components/home/TechBadge";
 
 // Data proyek
 export const projects = [
