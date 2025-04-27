@@ -21,7 +21,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
-            <body className="bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col min-h-screen">
+            <body
+                className={`bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable}`}
+            >
                 <Navbar />
                 <div className="flex-grow pb-6">{children}</div>{" "}
                 {/* Padding bawah untuk mencegah overlap dengan footer */}

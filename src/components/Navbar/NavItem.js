@@ -1,12 +1,9 @@
-// src/components/Navbar/NavItem.js
 import Link from "next/link";
 import { motion } from "framer-motion";
-import styles from "./Navbar.module.css";
 
 const NavItem = ({ href, Icon, label, isActive, onClick, index }) => {
     return (
         <motion.div
-            key={href}
             layout
             initial={{ x: -80, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -26,23 +23,23 @@ const NavItem = ({ href, Icon, label, isActive, onClick, index }) => {
                 className="relative group"
             >
                 <div
-                    className={`${styles.navItemContainer} ${
-                        isActive ? styles.navItemActive : styles.navItemInactive
+                    className={`p-3 rounded-full relative transition-all duration-500 ${
+                        isActive
+                            ? "bg-gradient-to-br from-blue-600 to-purple-700 translate-y-1 scale-110 shadow-2xl ring-4 ring-cyan-400 border border-white/30"
+                            : "bg-white/10 hover:bg-white/20 hover:scale-[1.15] hover:translate-y-1"
                     }`}
                 >
                     {isActive && (
-                        <span
-                            className={`${styles.activeGlow} ${styles.animateGlow}`}
-                        />
+                        <span className="absolute -inset-1 rounded-full border-2 border-cyan-300 opacity-70 blur-xl animate-glow z-0 pointer-events-none" />
                     )}
                     {isActive && (
-                        <span
-                            className={`${styles.activeRipple} ${styles.animateRipple}`}
-                        />
+                        <span className="absolute inset-0 rounded-full bg-blue-400 opacity-30 animate-ripple" />
                     )}
                     <motion.span
-                        className={`${styles.iconWrapper} ${
-                            isActive ? styles.iconActive : styles.iconInactive
+                        className={`relative z-10 text-white flex items-center justify-center ${
+                            isActive
+                                ? "text-white pulse-overlay"
+                                : "group-hover:text-blue-300"
                         }`}
                         animate={{
                             scale: isActive ? 1.3 : 1,
@@ -57,7 +54,9 @@ const NavItem = ({ href, Icon, label, isActive, onClick, index }) => {
                     >
                         <Icon size={22} />
                     </motion.span>
-                    <span className={styles.navTooltip}>{label}</span>
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
+                        {label}
+                    </span>
                 </div>
             </Link>
         </motion.div>

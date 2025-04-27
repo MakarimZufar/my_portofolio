@@ -1,13 +1,30 @@
 // src/hooks/useNavbar.js
-import { useState, useEffect, useRef } from "react";
+"use client";
 import { usePathname, useRouter } from "next/navigation";
-import {
-    navItems as initialNav,
-    avatarIcons,
-    avatarImages,
-} from "@/data/navbarData";
+import { FaHome, FaInfoCircle, FaEnvelope, FaSuitcase } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
 
-export function useNavbar() {
+const avatarIcons = [
+    "\u{1F468}\u200D\u{1F4BB}",
+    "\u{1F680}",
+    "\u{1F60E}",
+    "\u{2615}",
+    "\u{1F9E0}",
+    "\u{1F525}",
+];
+const avatarImages = [
+    "/profile_image/boy_profile.png",
+    "/profile_image/boy_profile_2.png",
+];
+
+const initialNav = [
+    { href: "/", icon: FaHome, label: "Home" },
+    { href: "/about", icon: FaInfoCircle, label: "About" },
+    { href: "/projects", icon: FaSuitcase, label: "Projects" },
+    { href: "/contact", icon: FaEnvelope, label: "Contact" },
+];
+
+export const useNavbar = () => {
     const pathname = usePathname();
     const router = useRouter();
     const clickSoundRef = useRef(null);
@@ -18,7 +35,6 @@ export function useNavbar() {
     const [lensActive, setLensActive] = useState(false);
     const [pendingIndex, setPendingIndex] = useState(null);
 
-    // Initialize nav items with animation delay
     useEffect(() => {
         let delay = 0;
         initialNav.forEach((item, index) => {
@@ -32,22 +48,18 @@ export function useNavbar() {
         return () => clearTimeout(timeout);
     }, []);
 
-    // Handle avatar transition effects
     useEffect(() => {
         const interval = setInterval(() => {
             setPendingIndex((prev) => (avatarIndex + 1) % avatarImages.length);
             setLensActive(true);
             setTimeout(() => {
-                setAvatarIndex(
-                    pendingIndex || (avatarIndex + 1) % avatarImages.length
-                );
+                setAvatarIndex((prev) => (prev + 1) % avatarImages.length);
                 setLensActive(false);
             }, 800);
         }, 4000);
         return () => clearInterval(interval);
-    }, [avatarIndex, pendingIndex]);
+    }, [avatarIndex]);
 
-    // Handle cycling through avatar icons
     const cycleAvatarIcon = () => {
         setAvatarIcon((prev) => {
             const index = avatarIcons.indexOf(prev);
@@ -55,12 +67,13 @@ export function useNavbar() {
         });
     };
 
-    // Handle navigation clicks
     const handleNavClick = (href) => {
-        clickSoundRef.current?.play();
+        if (clickSoundRef.current) {
+            clickSoundRef.current
+                .play()
+                .catch((e) => console.log("Sound play error:", e));
+        }
         const current = navItems.find((item) => item.href === pathname);
-
-        // Reorder nav items and navigate
         setTimeout(() => {
             setNavItems((prev) => {
                 const filtered = prev.filter((item) => item.href !== pathname);
@@ -72,6 +85,7 @@ export function useNavbar() {
 
     return {
         pathname,
+        router,
         clickSoundRef,
         avatarIcon,
         avatarIndex,
@@ -83,4 +97,6 @@ export function useNavbar() {
         cycleAvatarIcon,
         handleNavClick,
     };
-}
+};
+
+export default useNavbar;

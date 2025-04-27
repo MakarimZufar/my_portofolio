@@ -1,7 +1,5 @@
-// src/components/Navbar/Avatar.js
 import { motion } from "framer-motion";
 import Image from "next/image";
-import styles from "./Navbar.module.css";
 
 const Avatar = ({
     avatarIndex,
@@ -12,13 +10,13 @@ const Avatar = ({
     onAvatarClick,
 }) => {
     return (
-        <div className={styles.avatarContainer}>
+        <div className="relative w-[60px] h-[60px]">
             <motion.div
                 key={avatarIndex}
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.4 }}
-                className={styles.avatarWrapper}
+                className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-all bg-white relative z-10"
                 onClick={onAvatarClick}
             >
                 <Image
@@ -29,12 +27,14 @@ const Avatar = ({
                     }
                     alt="Avatar"
                     fill
-                    className={styles.avatarImage}
+                    className="object-cover rounded-full transition-all duration-300"
                 />
-                {lensActive && <div className={styles.spiralMask}></div>}
+                {lensActive && (
+                    <div className="absolute inset-0 z-20 spiral-in-mask"></div>
+                )}
             </motion.div>
             <motion.span
-                className={styles.avatarEmoji}
+                className="absolute -bottom-1.5 -right-1.5 text-2xl z-30 pointer-events-none drop-shadow-md"
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{
