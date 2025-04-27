@@ -1,4 +1,5 @@
 // src/data/techStackData.js
+import React from "react";
 import {
     FaReact,
     FaNodeJs,
@@ -145,6 +146,38 @@ export const techRows = [
     ],
 ];
 
-export const getExperienceDescription = (techName) => {
-    return `Experience with ${techName} includes building modern, efficient applications with focus on performance and scalability.`;
-};
+export function getExperienceDescription(techName) {
+    const descriptions = {
+        React: "Experienced with building complex applications using React hooks, context API, and integrating with various state management libraries.",
+        JavaScript:
+            "Strong expertise in modern JavaScript (ES6+) with focus on performance optimization and clean code principles.",
+        TypeScript:
+            "Proficient in implementing type-safe code, interfaces and generics for scalable applications.",
+        Tailwind:
+            "Skilled in rapidly building responsive interfaces with utility-first approach and custom configurations.",
+        "Next.js":
+            "Experienced in server-side rendering, static site generation, and API routes with focus on performance optimization.",
+        "Node.js":
+            "Built RESTful APIs, microservices, and server-side applications with focus on scalability and maintainability.",
+        Redux: "Implemented complex state management solutions for large-scale applications.",
+        "Vue.js":
+            "Created interactive UIs with Vue.js and its ecosystem including Vuex and Vue Router.",
+        Firebase:
+            "Developed applications with Firestore, Authentication, Cloud Functions, and Hosting.",
+        MongoDB:
+            "Designed document-based data models and integrated with Node.js applications.",
+        Docker: "Containerized applications for consistent development, testing, and production environments.",
+        Git: "Strong version control workflow with branch management, merging strategies, and collaboration.",
+        AWS: "Deployed and managed applications using EC2, S3, Lambda, and other AWS services.",
+        GraphQL:
+            "Created efficient APIs with focus on performance and client-specific data requirements.",
+        Vercel: "Deployed applications with continuous integration and preview deployments.",
+        PostgreSQL:
+            "Designed relational databases with focus on performance and data integrity.",
+    };
+
+    return (
+        descriptions[techName] ||
+        `Experience with ${techName} includes building modern, efficient applications with focus on performance and scalability.`
+    );
+}

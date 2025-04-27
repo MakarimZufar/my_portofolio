@@ -31,7 +31,7 @@ export default function ProjectCard({ project, index }) {
                 <div className={styles.cardOverlay}>
                     <div className={styles.buttonWrapper}>
                         <Link href="/projects" className={styles.detailButton}>
-                            View Details
+                            Lihat Detail
                         </Link>
                     </div>
                 </div>

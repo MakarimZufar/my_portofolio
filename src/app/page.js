@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import TechLayeredCarousel from "@/components/home/TechStackCarousel";
-import FeaturedProjects from "@/components/home/FeaturedProjects";
+import FeaturedProjects from "@/components/home/FeaturedProjects/FeaturedProjects";
 import IntroCard from "@/components/home/IntroCard/IntroCard";
 import styles from "@/styles/Home.module.css";
 
