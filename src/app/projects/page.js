@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllProjects } from "@/data/projectsData";
-import TechBadge from "@/components/home/TechBadge";
+import TechBadge from "@/components/TechBadge";
 
 export default function ProjectsPage() {
     const allProjects = getAllProjects();
