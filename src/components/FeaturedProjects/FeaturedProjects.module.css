@@ -65,13 +65,15 @@
   width: 20rem;
   flex-shrink: 0;
   scroll-snap-align: center;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(20, 20, 40, 0.7);
   backdrop-filter: blur(16px);
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-  border: 1px solid rgb(6, 182, 212);
-  transition: box-shadow 0.5s;
+  /* Ubah border dan shadow untuk efek lebih berkilau */
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.6);
+  transition: all 0.5s ease;
+  position: relative;
 }
 
 @media (min-width: 768px) {
@@ -114,8 +116,9 @@
   transition: transform 0.3s;
 }
 
-.card:hover .buttonWrapper {
-  transform: translateY(0);
+.card:hover {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.8), 0 0 60px rgba(6, 182, 212, 0.3);
+  transform: translateY(-5px) scale(1.02);
 }
 
 .detailButton {
@@ -152,4 +155,45 @@
 
 .projectGrid::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(45deg, #06b6d4, #3b82f6, #8b5cf6, #06b6d4);
+  border-radius: 0.85rem;
+  opacity: 0.5;
+  filter: blur(5px);
+  background-size: 200% 200%;
+  animation: gradientBorder 6s linear infinite;
+}
+
+@keyframes gradientBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.card:hover::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(6, 182, 212, 0.2) 0%,
+    transparent 30%
+  );
+  opacity: 0;
+  animation: spotlight 2s ease-in-out;
+}
+
+@keyframes spotlight {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
