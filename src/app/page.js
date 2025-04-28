@@ -4,7 +4,7 @@ import TechLayeredCarousel from "@/components/TechStack/TechStackCarousel";
 import FeaturedProjects from "@/components/FeaturedProjects/FeaturedProjects";
 import IntroCard from "@/components/IntroCard/IntroCard";
 import styles from "@/styles/Home.module.css";
-import ExperienceSection from "@/components/ExperienceSection";
+import ExperienceSection from "@/components/experience";
 
 export default function HomePage() {
     return (
