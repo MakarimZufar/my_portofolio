@@ -36,8 +36,8 @@ export default function ProjectCard({ project, index }) {
                     </div>
                 </div>
             </div>
-            <div className="p-5">
-                <h3 className="text-lg font-bold text-white mb-2">
+            <div className="p-5 relative z-10">
+                <h3 className="text-lg font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 to-blue-300">
                     {project.title}
                 </h3>
                 <p className="text-gray-400 text-sm mb-4 line-clamp-2">

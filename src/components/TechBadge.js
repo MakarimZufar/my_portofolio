@@ -1,5 +1,6 @@
 // src/components/home/TechBadge.js
 import React from "react";
+import { motion } from "framer-motion";
 
 export default function TechBadge({ name }) {
     const getBadgeColor = (tech) => {
@@ -30,13 +31,58 @@ export default function TechBadge({ name }) {
         );
     };
 
+    // Extract only color part for glow effect
+    const getGlowColor = (tech) => {
+        const colorMap = {
+            React: "blue",
+            "Next.js": "gray",
+            "Tailwind CSS": "sky",
+            JavaScript: "yellow",
+            TypeScript: "blue",
+            "Node.js": "green",
+            MongoDB: "green",
+            Express: "gray",
+            Firebase: "yellow",
+            Redux: "purple",
+            "Material UI": "blue",
+            HTML: "orange",
+            CSS: "blue",
+            "Framer Motion": "purple",
+            "NextAuth.js": "indigo",
+            "OpenWeather API": "orange",
+        };
+
+        return colorMap[tech] || "gray";
+    };
+
     return (
-        <span
+        <motion.span
             className={`text-xs inline-flex items-center px-2.5 py-0.5 rounded-full border ${getBadgeColor(
                 name
-            )}`}
+            )} backdrop-blur-sm relative overflow-hidden`}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{
+                scale: 1.1,
+                transition: { duration: 0.2 },
+            }}
+            style={{
+                boxShadow: `0 0 8px rgba(var(--${getGlowColor(
+                    name
+                )}-500-rgb), 0.3)`,
+            }}
         >
-            {name}
-        </span>
+            {/* Subtle glow effect on hover */}
+            <motion.span
+                className="absolute inset-0 opacity-0"
+                style={{
+                    background: `radial-gradient(circle at center, var(--${getGlowColor(
+                        name
+                    )}-500) 0%, transparent 70%)`,
+                }}
+                whileHover={{ opacity: 0.15 }}
+            />
+            <span className="relative z-10">{name}</span>
+        </motion.span>
     );
 }
