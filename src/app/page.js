@@ -83,14 +83,18 @@ export default function HomePage() {
                 </motion.div>
 
                 {/* Komponen carousel tech */}
-                <TechLayeredCarousel />
+                <TechLayeredCarousel />                
             </section>
 
             {/* Komponen Pengalaman */}
-            <ExperienceSection />
+            <section id="experience">
+                <ExperienceSection />
+            </section>
 
             {/* Komponen Proyek Unggulan */}
-            <FeaturedProjects />
+            <section id="projects">
+                <FeaturedProjects />
+            </section>
 
             {/* Scroll Indicator untuk halaman */}
             <ScrollIndicator />

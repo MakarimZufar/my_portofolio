@@ -6,10 +6,10 @@ export default function ScrollIndicator() {
     const [activeSection, setActiveSection] = useState("hero");
     const sections = ["hero", "skills", "experience", "projects"];
     const sectionNames = {
-        hero: "Beranda",
-        skills: "Kemampuan",
-        experience: "Pengalaman",
-        projects: "Proyek",
+        hero: "Main",
+        skills: "Skills",
+        experience: "Experience",
+        projects: "Projects",
     };
 
     // Mengukur progress scroll
