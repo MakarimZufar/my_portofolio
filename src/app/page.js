@@ -33,7 +33,7 @@ export default function HomePage() {
     }, []);
 
     return (
-        <main className="text-white overflow-x-hidden bg-gradient-to-b from-[#050515] via-[#0a0a1a] to-[#05051F] min-h-screen relative">
+        <main className="text-white overflow-x-hidden overflow-y-hidden bg-gradient-to-b from-[#050515] via-[#0a0a1a] to-[#05051F] min-h-screen relative">
             {/* Background interaktif dengan partikel */}
             <InteractiveBackground />
 
