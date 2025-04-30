@@ -1,8 +1,11 @@
+"use client";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import UnderConstructionNotification from "@/components/UnderConstructionNotifications";
 
 export default function ContactPage() {
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
+            < UnderConstructionNotification />
             <h1 className="text-3xl font-bold mb-6 text-center">
                 Hubungi Saya
             </h1>

@@ -42,33 +42,32 @@ const terminalLines = [
     },
 ];
 
-// Kode untuk background effect
-const codeSnippets = [
-    "function Page404() {",
-    "  return <Error code={404} />",
-    "}",
-    "router.push('/404')",
-    "throw new Error('Route not found')",
-    "const routes = getStaticPaths()",
-    "export async function getStaticProps() {",
-    "try {",
-    "  const data = await fetch(API)",
-    "} catch (error) {",
-    "  console.error('404 not found')",
-    "}",
-    "<Route path='*' element={<NotFound />} />",
-    "if (!page) return <NotFoundPage />",
-    "export const NotFoundPage = () => {",
-];
-
 export default function NotFound() {
     const [typedLines, setTypedLines] = useState([]);
     const [currentErrorMsg, setCurrentErrorMsg] = useState(errorMessages[0]);
     const [showRedoAnimation, setShowRedoAnimation] = useState(false);
     const [isHacking, setIsHacking] = useState(false);
 
-    const codeRainRef = useRef(null);
     const clickSoundRef = useRef(null);
+
+    // Menyembunyikan komponen lain
+    useEffect(() => {
+        // Menyembunyikan navbar dan footer menggunakan DOM manipulation
+        const navbar = document.querySelector("nav");
+        const footer = document.querySelector("footer");
+
+        if (navbar) navbar.style.display = "none";
+        if (footer) footer.style.display = "none";
+
+        document.body.style.overflow = "hidden";
+
+        // Cleanup - mengembalikan tampilan saat komponen di-unmount
+        return () => {
+            if (navbar) navbar.style.display = "";
+            if (footer) footer.style.display = "";
+            document.body.style.overflow = "";
+        };
+    }, []);
 
     // Efek animasi terminal typing
     useEffect(() => {
@@ -76,7 +75,7 @@ export default function NotFound() {
 
         terminalLines.forEach((line, index) => {
             const timeout = setTimeout(() => {
-                setTypedLines((prev) => [...prev, line]);
+                setTypedLines((prev) => [...prev, { ...line, id: index }]);
             }, line.delay);
 
             timeouts.push(timeout);
@@ -93,53 +92,6 @@ export default function NotFound() {
         return () => {
             timeouts.forEach((timeout) => clearTimeout(timeout));
             clearInterval(intervalId);
-        };
-    }, []);
-
-    // Animasi code rain di background
-    useEffect(() => {
-        if (!codeRainRef.current) return;
-
-        const container = codeRainRef.current;
-        const elementsCount = 30;
-        const elements = [];
-
-        for (let i = 0; i < elementsCount; i++) {
-            const element = document.createElement("div");
-            element.className = "codeBgElement";
-
-            // Posisi dan style acak
-            element.style.left = `${Math.random() * 100}%`;
-            element.style.top = `-${Math.random() * 20}px`;
-            element.style.fontSize = `${Math.random() * 0.5 + 0.7}rem`;
-            element.style.opacity = `${Math.random() * 0.5 + 0.1}`;
-            element.style.position = "fixed";
-            element.style.color = "rgba(59, 130, 246, 0.3)";
-            element.style.fontFamily = "monospace";
-            element.style.whiteSpace = "nowrap";
-            element.style.pointerEvents = "none";
-
-            // Tentukan konten kode random
-            element.textContent =
-                codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-
-            // Set animasi
-            element.style.animation = `fall ${
-                Math.random() * 15 + 10
-            }s linear infinite`;
-            element.style.animationDelay = `${Math.random() * 10}s`;
-
-            container.appendChild(element);
-            elements.push(element);
-        }
-
-        // Clean up
-        return () => {
-            elements.forEach((element) => {
-                if (container.contains(element)) {
-                    container.removeChild(element);
-                }
-            });
         };
     }, []);
 
@@ -160,212 +112,151 @@ export default function NotFound() {
         setTimeout(() => setIsHacking(false), 3000);
     };
 
+    // Membuat array dengan indeks unik untuk animasi kode jatuh
+    const fallingCodeElements = Array.from({ length: 20 }).map((_, i) => ({
+        id: `falling-code-${i}`,
+        x: Math.random() * 100 - 50,
+        y: -20,
+        duration: Math.random() * 10 + 15,
+        delay: Math.random() * 10,
+    }));
+
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-white p-6 overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-gray-900 text-white flex flex-col items-center justify-center p-6 overflow-hidden">
             {/* Audio untuk click sound */}
             <audio ref={clickSoundRef} src="/click.mp3" preload="auto" />
 
-            {/* Background code rain effect */}
-            <div
-                ref={codeRainRef}
-                className="fixed inset-0 pointer-events-none z-0"
-            >
-                <style jsx global>{`
-                    @keyframes fall {
-                        0% {
-                            transform: translateY(-20px);
-                        }
-                        100% {
-                            transform: translateY(100vh);
-                        }
+            <style jsx global>{`
+                @keyframes glitch-animation {
+                    0% {
+                        transform: translate(0);
                     }
-
-                    @keyframes float {
-                        0%,
-                        100% {
-                            transform: translateY(0px) rotate(0deg);
-                        }
-                        25% {
-                            transform: translateY(-10px) rotate(2deg);
-                        }
-                        50% {
-                            transform: translateY(0px) rotate(0deg);
-                        }
-                        75% {
-                            transform: translateY(10px) rotate(-2deg);
-                        }
+                    20% {
+                        transform: translate(-3px, 3px);
                     }
-
-                    @keyframes glitch-animation {
-                        0% {
-                            transform: translate(0);
-                        }
-                        20% {
-                            transform: translate(-3px, 3px);
-                        }
-                        40% {
-                            transform: translate(-3px, -3px);
-                        }
-                        60% {
-                            transform: translate(3px, 3px);
-                        }
-                        80% {
-                            transform: translate(3px, -3px);
-                        }
-                        100% {
-                            transform: translate(0);
-                        }
+                    40% {
+                        transform: translate(-3px, -3px);
                     }
-
-                    @keyframes blink {
-                        0%,
-                        100% {
-                            opacity: 1;
-                        }
-                        50% {
-                            opacity: 0;
-                        }
+                    60% {
+                        transform: translate(3px, 3px);
                     }
-
-                    @keyframes pulse {
-                        0% {
-                            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
-                        }
-                        70% {
-                            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
-                        }
-                        100% {
-                            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-                        }
+                    80% {
+                        transform: translate(3px, -3px);
                     }
-
-                    @keyframes ripple {
-                        0% {
-                            transform: scale(1);
-                            opacity: 0.4;
-                        }
-                        100% {
-                            transform: scale(2.5);
-                            opacity: 0;
-                        }
+                    100% {
+                        transform: translate(0);
                     }
+                }
 
-                    @keyframes scanner {
-                        0%,
-                        100% {
-                            transform: translateY(-100%);
-                            opacity: 0;
-                        }
-                        10%,
-                        90% {
-                            opacity: 0.15;
-                        }
-                        50% {
-                            transform: translateY(100%);
-                            opacity: 0.3;
-                        }
+                @keyframes blink {
+                    0%,
+                    100% {
+                        opacity: 1;
                     }
-
-                    .glitch {
-                        position: relative;
-                        font-size: 8rem;
-                        font-weight: 700;
-                        text-align: center;
-                        color: #f56565;
-                        letter-spacing: -0.02em;
+                    50% {
+                        opacity: 0;
                     }
+                }
 
-                    .glitch::before,
-                    .glitch::after {
-                        content: "404";
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                    }
-
-                    .glitch::before {
-                        left: 2px;
-                        text-shadow: -2px 0 #49c5f6;
-                        animation: glitch-animation 2s infinite linear
-                            alternate-reverse;
-                        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-                    }
-
-                    .glitch::after {
-                        left: -2px;
-                        text-shadow: 2px 0 #f56565;
-                        animation: glitch-animation 3s infinite linear
-                            alternate-reverse;
-                        clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-                    }
-
-                    .animate-ripple {
-                        animation: ripple 1.2s ease-out infinite;
-                    }
-
-                    .animate-blink {
-                        animation: blink 1s step-end infinite;
-                    }
-
-                    .animate-pulse-button {
-                        position: relative;
-                    }
-
-                    .animate-pulse-button::after {
-                        content: "";
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        border-radius: 0.375rem;
+                @keyframes pulse {
+                    0% {
                         box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
-                        animation: pulse 2s infinite;
                     }
+                    70% {
+                        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+                    }
+                }
 
-                    .blinking-cursor {
-                        display: inline-block;
-                        width: 0.6em;
-                        height: 1em;
-                        background-color: currentColor;
-                        margin-left: 2px;
-                        animation: blink 1s step-end infinite;
+                @keyframes scanner {
+                    0%,
+                    100% {
+                        transform: translateY(-100%);
+                        opacity: 0;
                     }
+                    10%,
+                    90% {
+                        opacity: 0.15;
+                    }
+                    50% {
+                        transform: translateY(100%);
+                        opacity: 0.3;
+                    }
+                }
 
-                    .scan-line {
-                        position: absolute;
-                        height: 4px;
-                        width: 100%;
-                        background-color: rgba(0, 255, 0, 0.2);
-                        animation: scanner 3s linear infinite;
-                    }
-                `}</style>
-            </div>
+                .glitch {
+                    position: relative;
+                    font-size: 8rem;
+                    font-weight: 700;
+                    text-align: center;
+                    color: #f56565;
+                    letter-spacing: -0.02em;
+                }
+
+                .glitch::before,
+                .glitch::after {
+                    content: "404";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .glitch::before {
+                    left: 2px;
+                    text-shadow: -2px 0 #49c5f6;
+                    animation: glitch-animation 2s infinite linear
+                        alternate-reverse;
+                    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+                }
+
+                .glitch::after {
+                    left: -2px;
+                    text-shadow: 2px 0 #f56565;
+                    animation: glitch-animation 3s infinite linear
+                        alternate-reverse;
+                    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+                }
+
+                .blinking-cursor {
+                    display: inline-block;
+                    width: 0.6em;
+                    height: 1em;
+                    background-color: currentColor;
+                    margin-left: 2px;
+                    animation: blink 1s step-end infinite;
+                }
+
+                .scan-line {
+                    position: absolute;
+                    height: 4px;
+                    width: 100%;
+                    background-color: rgba(0, 255, 0, 0.2);
+                    animation: scanner 3s linear infinite;
+                }
+            `}</style>
 
             {/* Animated code elements */}
-            {[...Array(20)].map((_, i) => (
+            {fallingCodeElements.map((item) => (
                 <motion.div
-                    key={i}
+                    key={item.id}
                     className="absolute text-blue-500 opacity-30 text-xs"
-                    initial={{
-                        x: Math.random() * 100 - 50 + "%",
-                        y: -20,
-                        opacity: 0.7,
-                    }}
+                    initial={{ x: `${item.x}%`, y: item.y, opacity: 0.7 }}
                     animate={{
                         y: "150vh",
                         opacity: [0.7, 0.5, 0.7],
-                        x: `calc(${Math.random() * 100 - 50}% + ${
+                        x: `calc(${item.x}% + ${
                             Math.sin(Math.random() * 5) * 100
                         }px)`,
                     }}
                     transition={{
-                        duration: Math.random() * 10 + 15,
+                        duration: item.duration,
                         repeat: Infinity,
                         ease: "linear",
-                        delay: Math.random() * 10,
+                        delay: item.delay,
                     }}
                 >
                     {Math.random() > 0.5 ? "</" : "<"}
@@ -440,9 +331,9 @@ export default function NotFound() {
                             <span className="text-white">$ </span>
                             <FaTerminal className="ml-2 text-gray-400" />
                         </div>
-                        {typedLines.map((line, index) => (
+                        {typedLines.map((line) => (
                             <motion.div
-                                key={index}
+                                key={`terminal-line-${line.id}`}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 className={line.class}
@@ -471,7 +362,7 @@ export default function NotFound() {
                 <div className="flex justify-center gap-4 p-6 bg-gray-900">
                     <Link href="/">
                         <motion.button
-                            className="animate-pulse-button bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -529,6 +420,6 @@ export default function NotFound() {
                     Error ID: {Math.random().toString(36).substring(2, 10)}
                 </p>
             </motion.div>
-        </main>
+        </div>
     );
 }

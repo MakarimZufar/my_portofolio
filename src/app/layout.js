@@ -25,8 +25,7 @@ export default function RootLayout({ children }) {
                 className={`bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable}`}
             >
                 <Navbar />
-                <div className="flex-grow pb-6">{children}</div>{" "}
-                {/* Padding bawah untuk mencegah overlap dengan footer */}
+                <div className="flex-grow pb-6">{children}</div>
                 <Footer />
             </body>
         </html>
