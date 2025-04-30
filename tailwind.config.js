@@ -17,6 +17,10 @@ module.exports = {
                 "glow-cyan": "0 0 30px rgba(0, 255, 255, 0.2)",
                 "glow-cyan-hover": "0 0 30px rgba(0, 255, 255, 0.8)",
             },
+            fontFamily: {
+                sans: ["var(--font-geist-sans)", "sans-serif"],
+                mono: ["var(--font-geist-mono)", "monospace"],
+            },
         },
     },
     plugins: [],
