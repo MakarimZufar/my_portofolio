@@ -1,6 +1,16 @@
+"use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+/**
+ * Komponen Avatar untuk navbar
+ * @param {number} avatarIndex - Indeks avatar saat ini
+ * @param {number|null} pendingIndex - Indeks avatar yang akan tampil selanjutnya
+ * @param {string} avatarIcon - Emoji ikon yang ditampilkan di pojok avatar
+ * @param {boolean} lensActive - Status efek lensa aktif atau tidak
+ * @param {string[]} avatarImages - Array path gambar avatar
+ * @param {function} onAvatarClick - Handler saat avatar diklik
+ */
 const Avatar = ({
     avatarIndex,
     pendingIndex,
@@ -27,7 +37,9 @@ const Avatar = ({
                     }
                     alt="Avatar"
                     fill
-                    className="object-cover rounded-full transition-all duration-300"
+                    className={`object-cover rounded-full transition-all duration-300 ${
+                        lensActive ? "opacity-70" : "opacity-100"
+                    }`}
                 />
                 {lensActive && (
                     <div className="absolute inset-0 z-20 spiral-in-mask"></div>

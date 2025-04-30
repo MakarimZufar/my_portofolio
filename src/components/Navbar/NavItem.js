@@ -1,13 +1,24 @@
+// src/components/Navbar/NavItem.js
+"use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+/**
+ * Komponen untuk item navigasi dalam navbar
+ * @param {string} href - Path tujuan navigasi
+ * @param {Component} Icon - Komponen ikon React
+ * @param {string} label - Label untuk navigasi
+ * @param {boolean} isActive - Status item aktif atau tidak
+ * @param {function} onClick - Handler ketika item diklik
+ * @param {number} index - Indeks item untuk animasi
+ */
 const NavItem = ({ href, Icon, label, isActive, onClick, index }) => {
     return (
         <motion.div
             layout
             initial={{ x: -80, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ y: 60, scale: 0.95, opacity: 1 }}
+            exit={{ y: 60, scale: 0.95, opacity: 0 }}
             transition={{
                 delay: index * 0.2,
                 duration: 0.5,
