@@ -10,6 +10,13 @@ import {
     personalInfo,
 } from "@/data/homeData";
 import styles from "./IntroCard.module.css";
+import { Pacifico } from "next/font/google";
+
+const pacifico = Pacifico({
+    weight: "400",
+    subsets: ["latin"],
+    display: "swap",
+});
 
 export default function IntroCard() {
     const [helloText, setHelloText] = useState("");
@@ -113,7 +120,9 @@ export default function IntroCard() {
             >
                 {/* Card Front Side */}
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
-                    <motion.h1 className="text-6xl sm:text-7xl font-bold text-white font-[Pacifico,cursive] text-center">
+                    <motion.h1
+                        className={`text-6xl sm:text-7xl font-bold text-white ${pacifico.className} text-center`}
+                    >
                         {helloText}
                         <span className="animate-pulse">|</span>
                     </motion.h1>
