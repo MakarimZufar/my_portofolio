@@ -113,7 +113,7 @@ export default function IntroCard() {
             >
                 {/* Card Front Side */}
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
-                    <motion.h1 className="text-6xl sm:text-7xl font-bold text-white font-[Pacifico] text-center">
+                    <motion.h1 className="text-6xl sm:text-7xl font-bold text-white font-[Pacifico,cursive] text-center">
                         {helloText}
                         <span className="animate-pulse">|</span>
                     </motion.h1>
