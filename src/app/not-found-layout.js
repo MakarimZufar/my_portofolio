@@ -13,10 +13,10 @@ const geistMono = Geist_Mono({
 
 export default function NotFoundLayout({ children }) {
     return (
-        <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                {children}
-            </body>
-        </html>
+        <div
+            className={`not-found-container ${geistSans.variable} ${geistMono.variable}`}
+        >
+            {children}
+        </div>
     );
 }

@@ -118,7 +118,7 @@ export default function Navbar() {
                     {navItems.map(
                         ({ href, icon, label, secretMode }, index) => (
                             <NavItem
-                                key={href}
+                                key={`${href}-${index}`}
                                 href={href}
                                 Icon={icon}
                                 label={label}
