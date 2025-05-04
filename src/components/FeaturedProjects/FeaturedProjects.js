@@ -1,204 +1,222 @@
+// src/components/FeaturedProjects/FeaturedProjects.js
+"use client";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useRef } from "react";
-import { HiArrowRight, HiChevronLeft, HiChevronRight } from "react-icons/hi";
-import ProjectCard from "./ProjectCard";
-import { getFeaturedProjects } from "@/data/projectsData";
+import { FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
+import { getFeaturedProjects } from "@/data/projectsData"; // Import fungsi untuk mendapatkan proyek unggulan
 
-export default function UpdatedFeaturedProjects() {
-    const featuredProjects = getFeaturedProjects();
-    const containerRef = useRef(null);
+// Menggunakan data dari projectsData.js
+const featuredProjects = getFeaturedProjects();
 
-    // Fungsi untuk scroll secara horizontal pada tampilan mobile
+// Import komponen TechBadge dan ProjectTag
+import TechBadge from "@/components/TechBadge";
+import ProjectTag from "@/components/ProjectTag";
+
+// Project Card
+const ProjectCard = ({ project, index }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+            className="group relative rounded-xl overflow-hidden bg-gradient-to-br from-gray-900 to-black p-1 h-full"
+            whileHover={{ y: -8, transition: { duration: 0.3 } }}
+        >
+            {/* Gradient Border */}
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            {/* Inner Content */}
+            <div className="relative bg-gray-900 rounded-xl p-5 flex flex-col h-full z-10">
+                {/* Project Title */}
+                <h3 className="text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                    {project.title}
+                </h3>
+
+                {/* Tags */}
+                <div className="flex gap-2 mb-3 flex-wrap">
+                    {project.tags.map((tag) => (
+                        <ProjectTag key={tag} name={tag} />
+                    ))}
+                </div>
+
+                {/* Description */}
+                <p className="text-gray-400 text-sm mb-4 flex-grow">
+                    {project.description}
+                </p>
+
+                {/* Technologies */}
+                <div className="mb-4">
+                    <div className="text-xs text-gray-500 mb-2">Teknologi:</div>
+                    <div className="flex flex-wrap gap-2">
+                        {project.technologies.slice(0, 3).map((tech) => (
+                            <TechBadge key={tech} name={tech} />
+                        ))}
+                        {project.technologies.length > 3 && (
+                            <span className="text-xs px-2 py-1 bg-gray-800 text-gray-400 rounded-full">
+                                +{project.technologies.length - 3}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                {/* Links - becomes visible on hover */}
+                <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">
+                    <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                        GitHub
+                    </a>
+                    <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full hover:from-cyan-600 hover:to-blue-600 transition-colors"
+                    >
+                        Lihat Demo
+                    </a>
+                </div>
+
+                {/* Shimmer effect on hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 opacity-0 group-hover:opacity-100" />
+            </div>
+        </motion.div>
+    );
+};
+
+export default function FeaturedProjects() {
+    const scrollContainerRef = useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    // Mengecek apakah dapat scroll kiri/kanan
+    const checkScrollability = () => {
+        const el = scrollContainerRef.current;
+        if (el) {
+            setCanScrollLeft(el.scrollLeft > 0);
+            setCanScrollRight(
+                el.scrollLeft < el.scrollWidth - el.clientWidth - 10
+            );
+        }
+    };
+
+    // Inisialisasi check scrollability pada component mount dan resize
+    useEffect(() => {
+        checkScrollability();
+        window.addEventListener("resize", checkScrollability);
+        return () => window.removeEventListener("resize", checkScrollability);
+    }, []);
+
+    // Handler untuk tombol scroll
     const handleScroll = (direction) => {
-        if (containerRef.current) {
+        const el = scrollContainerRef.current;
+        if (el) {
             const scrollAmount = direction === "left" ? -300 : 300;
-            containerRef.current.scrollBy({
-                left: scrollAmount,
-                behavior: "smooth",
-            });
+            el.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
+            // Update status setelah scroll
+            setTimeout(checkScrollability, 300);
         }
     };
 
     return (
-        <section className="px-4 sm:px-10 md:px-20 py-20 w-full">
-            <motion.div
-                className="max-w-6xl mx-auto relative"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7 }}
-            >
-                {/* Section Background with Glassmorphism */}
-                <div className="absolute inset-0 rounded-2xl p-[1px]">
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 via-gray-900/95 to-gray-950 rounded-2xl">
-                        {/* Animated gradient lines */}
-                        <div className="absolute inset-0 overflow-hidden rounded-2xl opacity-20">
-                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent transform -translate-x-full animate-[shimmer_4s_infinite]"></div>
-                            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent transform translate-x-full animate-[shimmer_4s_infinite]"></div>
-                            <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent transform -translate-y-full animate-[shimmer_5s_infinite]"></div>
-                            <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-cyan-500 to-transparent transform translate-y-full animate-[shimmer_5s_infinite]"></div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Content Container */}
-                <div className="relative p-6 md:p-10 backdrop-blur-sm">
-                    {/* Section Header */}
-                    <div className="text-center mb-10">
-                        <motion.div
-                            initial={{ y: -20, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                            className="relative inline-block"
-                        >
-                            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-500 bg-clip-text text-transparent inline-block mb-2">
-                                Proyek Unggulan
-                            </h2>
-
-                            {/* Decorative Underline */}
-                            <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-500 rounded-full"></div>
-
-                            {/* Glowing dots */}
-                            <motion.div
-                                className="absolute -left-3 -bottom-1 w-2 h-2 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50"
-                                animate={{
-                                    scale: [1, 1.5, 1],
-                                    opacity: [0.7, 1, 0.7],
-                                }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                            />
-                            <motion.div
-                                className="absolute -right-3 -bottom-1 w-2 h-2 rounded-full bg-blue-400 shadow-lg shadow-blue-400/50"
-                                animate={{
-                                    scale: [1, 1.5, 1],
-                                    opacity: [0.7, 1, 0.7],
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    delay: 1,
-                                }}
-                            />
-                        </motion.div>
-
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
-                            className="text-gray-400 mt-4 max-w-2xl mx-auto"
-                        >
-                            Beberapa proyek terbaik yang saya kerjakan. Klik
-                            pada kartu untuk melihat detail lebih lanjut.
-                        </motion.p>
-                    </div>
-
-                    {/* Projects Grid with Scroll Controls for Mobile */}
-                    <div className="relative mb-8">
-                        {/* Scroll Controls for Mobile/Tablet */}
-                        <motion.div
-                            className="absolute -left-4 top-1/2 transform -translate-y-1/2 z-10 md:hidden"
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.8 }}
-                        >
-                            <button
-                                onClick={() => handleScroll("left")}
-                                className="w-8 h-8 bg-gray-800 bg-opacity-70 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg hover:bg-gray-700 border border-gray-700/50"
-                                aria-label="Scroll left"
-                            >
-                                <HiChevronLeft className="w-5 h-5" />
-                            </button>
-                        </motion.div>
-
-                        <motion.div
-                            className="absolute -right-4 top-1/2 transform -translate-y-1/2 z-10 md:hidden"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.8 }}
-                        >
-                            <button
-                                onClick={() => handleScroll("right")}
-                                className="w-8 h-8 bg-gray-800 bg-opacity-70 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg hover:bg-gray-700 border border-gray-700/50"
-                                aria-label="Scroll right"
-                            >
-                                <HiChevronRight className="w-5 h-5" />
-                            </button>
-                        </motion.div>
-
-                        {/* Scrollable Container for Mobile / Grid for Desktop */}
-                        <div
-                            ref={containerRef}
-                            className="flex overflow-x-auto pb-4 md:pb-0 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 hide-scrollbar"
-                        >
-                            {featuredProjects.map((project, i) => (
-                                <motion.div
-                                    key={project.id}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{
-                                        duration: 0.6,
-                                        delay: i * 0.15,
-                                    }}
-                                    className="flex-shrink-0 w-64 md:w-auto"
-                                >
-                                    <ProjectCard
-                                        project={project}
-                                        index={i}
-                                    />
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* View All Projects Button */}
+        <section className="py-16 px-4 md:px-10 lg:px-20">
+            <div className="max-w-7xl mx-auto">
+                {/* Section Header */}
+                <div className="text-center mb-12">
                     <motion.div
-                        className="text-center mt-8"
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: -20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.5, duration: 0.5 }}
+                        transition={{ duration: 0.5 }}
+                        className="inline-block"
                     >
-                        <Link
-                            href="/projects"
-                            className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full font-medium hover:from-cyan-500 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-cyan-500/20 group"
+                        <h2 className="text-3xl font-bold mb-2 text-cyan-400">
+                            Proyek Unggulan
+                        </h2>
+                        <div className="h-1 w-24 mx-auto bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" />
+                    </motion.div>
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                        className="mt-4 text-gray-400 max-w-2xl mx-auto"
+                    >
+                        Beberapa proyek terbaik yang telah saya kerjakan,
+                        menggabungkan teknologi modern dan solusi inovatif.
+                    </motion.p>
+                </div>
+
+                {/* Projects Container with Horizontal Scroll on Mobile/Tablet */}
+                <div className="relative">
+                    {/* Scroll Buttons (hanya muncul jika perlu) */}
+                    {canScrollLeft && (
+                        <button
+                            onClick={() => handleScroll("left")}
+                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 lg:hidden"
+                            aria-label="Scroll left"
+                        >
+                            <FaChevronLeft />
+                        </button>
+                    )}
+
+                    {canScrollRight && (
+                        <button
+                            onClick={() => handleScroll("right")}
+                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 lg:hidden"
+                            aria-label="Scroll right"
+                        >
+                            <FaChevronRight />
+                        </button>
+                    )}
+
+                    {/* Projects Grid for Desktop / Scrollable Container for Mobile */}
+                    <div
+                        ref={scrollContainerRef}
+                        className="flex overflow-x-auto gap-6 pb-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible scrollbar-hide"
+                        onScroll={checkScrollability}
+                    >
+                        {featuredProjects.map((project, index) => (
+                            <div
+                                key={project.id}
+                                className="w-80 flex-shrink-0 lg:w-auto"
+                            >
+                                <ProjectCard project={project} index={index} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* View All Projects Button */}
+                <div className="text-center mt-12">
+                    <Link href="/projects" legacyBehavior>
+                        <motion.a
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full font-medium hover:from-cyan-500 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-cyan-500/20"
                         >
                             <span>Lihat Semua Proyek</span>
-                            <motion.span
-                                animate={{ x: [0, 4, 0] }}
-                                transition={{
-                                    duration: 1.5,
-                                    repeat: Infinity,
-                                    repeatType: "loop",
-                                }}
-                                className="group-hover:translate-x-1 transition-transform"
-                            >
-                                <HiArrowRight />
-                            </motion.span>
-                        </Link>
-                    </motion.div>
+                            <FaArrowRight />
+                        </motion.a>
+                    </Link>
                 </div>
-            </motion.div>
+            </div>
 
-            {/* CSS untuk menghilangkan scrollbar namun tetap memungkinkan scroll */}
+            {/* Styling untuk hide scrollbar tetapi tetap bisa scroll */}
             <style jsx>{`
-                @keyframes shimmer {
-                    0% {
-                        transform: translateX(-100%);
-                    }
-                    100% {
-                        transform: translateX(100%);
-                    }
-                }
-                .hide-scrollbar {
-                    scrollbar-width: none; /* Firefox */
+                .scrollbar-hide {
                     -ms-overflow-style: none; /* IE and Edge */
+                    scrollbar-width: none; /* Firefox */
                 }
-                .hide-scrollbar::-webkit-scrollbar {
-                    display: none; /* Chrome, Safari, Opera */
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none; /* Chrome, Safari and Opera */
                 }
             `}</style>
         </section>

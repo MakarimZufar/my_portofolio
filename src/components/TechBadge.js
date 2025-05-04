@@ -1,206 +1,101 @@
-import React from "react";
-import {
-    FaReact,
-    FaNodeJs,
-    FaHtml5,
-    FaCss3Alt,
-    FaFigma,
-    FaGitAlt,
-    FaAws,
-    FaDocker,
-    FaDatabase,
-    FaJs,
-    FaCode,
-    FaFire,
-    FaServer,
-} from "react-icons/fa";
+// components/TechBadge.js
+"use client";
+import { motion } from "framer-motion";
 
-// Konfigurasi warna dan ikon untuk setiap teknologi
-const techConfig = {
-    React: {
-        bg: "bg-gradient-to-r from-cyan-900/50 to-cyan-700/30",
-        text: "text-cyan-300",
-        border: "border-cyan-500/40",
-        icon: FaReact,
-        iconColor: "text-cyan-400",
-    },
-    "Next.js": {
-        bg: "bg-gradient-to-r from-gray-900/50 to-gray-800/30",
-        text: "text-white",
-        border: "border-white/30",
-        icon: FaReact, // Menggunakan ikon React sebagai pengganti untuk Next.js
-        iconColor: "text-white",
-    },
-    TypeScript: {
-        bg: "bg-gradient-to-r from-blue-900/50 to-blue-700/30",
-        text: "text-blue-300",
-        border: "border-blue-500/40",
-        icon: FaCode,
-        iconColor: "text-blue-400",
-    },
-    JavaScript: {
-        bg: "bg-gradient-to-r from-yellow-900/50 to-yellow-700/30",
-        text: "text-yellow-300",
-        border: "border-yellow-500/40",
-        icon: FaJs,
-        iconColor: "text-yellow-400",
-    },
-    "Node.js": {
-        bg: "bg-gradient-to-r from-green-900/50 to-green-700/30",
-        text: "text-green-300",
-        border: "border-green-500/40",
-        icon: FaNodeJs,
-        iconColor: "text-green-400",
-    },
-    Express: {
-        bg: "bg-gradient-to-r from-gray-900/50 to-gray-700/30",
-        text: "text-gray-300",
-        border: "border-gray-500/40",
-        icon: FaServer,
-        iconColor: "text-gray-400",
-    },
-    MongoDB: {
-        bg: "bg-gradient-to-r from-green-900/50 to-green-700/30",
-        text: "text-green-300",
-        border: "border-green-500/40",
-        icon: FaDatabase,
-        iconColor: "text-green-400",
-    },
-    Firebase: {
-        bg: "bg-gradient-to-r from-yellow-900/50 to-amber-700/30",
-        text: "text-yellow-300",
-        border: "border-yellow-500/40",
-        icon: FaFire,
-        iconColor: "text-yellow-400",
-    },
-    "Tailwind CSS": {
-        bg: "bg-gradient-to-r from-cyan-900/50 to-blue-700/30",
-        text: "text-cyan-300",
-        border: "border-cyan-500/40",
-        icon: FaCss3Alt,
-        iconColor: "text-cyan-400",
-    },
-    HTML: {
-        bg: "bg-gradient-to-r from-orange-900/50 to-orange-700/30",
-        text: "text-orange-300",
-        border: "border-orange-500/40",
-        icon: FaHtml5,
-        iconColor: "text-orange-400",
-    },
-    CSS: {
-        bg: "bg-gradient-to-r from-blue-900/50 to-blue-700/30",
-        text: "text-blue-300",
-        border: "border-blue-500/40",
-        icon: FaCss3Alt,
-        iconColor: "text-blue-400",
-    },
-    "Material UI": {
-        bg: "bg-gradient-to-r from-blue-900/50 to-indigo-700/30",
-        text: "text-blue-300",
-        border: "border-blue-500/40",
-        icon: FaReact, // Menggunakan ikon React sebagai alternatif
-        iconColor: "text-blue-400",
-    },
-    Redux: {
-        bg: "bg-gradient-to-r from-purple-900/50 to-purple-700/30",
-        text: "text-purple-300",
-        border: "border-purple-500/40",
-        icon: FaCode,
-        iconColor: "text-purple-400",
-    },
-    PostgreSQL: {
-        bg: "bg-gradient-to-r from-blue-900/50 to-cyan-700/30",
-        text: "text-blue-300",
-        border: "border-blue-500/40",
-        icon: FaDatabase,
-        iconColor: "text-blue-400",
-    },
-    GraphQL: {
-        bg: "bg-gradient-to-r from-pink-900/50 to-pink-700/30",
-        text: "text-pink-300",
-        border: "border-pink-500/40",
-        icon: FaCode,
-        iconColor: "text-pink-400",
-    },
-    "Framer Motion": {
-        bg: "bg-gradient-to-r from-purple-900/50 to-fuchsia-700/30",
-        text: "text-purple-300",
-        border: "border-purple-500/40",
-        icon: FaCode,
-        iconColor: "text-purple-400",
-    },
-    SASS: {
-        bg: "bg-gradient-to-r from-pink-900/50 to-pink-700/30",
-        text: "text-pink-300",
-        border: "border-pink-500/40",
-        icon: FaCss3Alt,
-        iconColor: "text-pink-400",
-    },
-    Docker: {
-        bg: "bg-gradient-to-r from-blue-900/50 to-cyan-700/30",
-        text: "text-blue-300",
-        border: "border-blue-500/40",
-        icon: FaDocker,
-        iconColor: "text-blue-400",
-    },
-    AWS: {
-        bg: "bg-gradient-to-r from-yellow-900/50 to-orange-700/30",
-        text: "text-yellow-300",
-        border: "border-yellow-500/40",
-        icon: FaAws,
-        iconColor: "text-yellow-400",
-    },
-    Figma: {
-        bg: "bg-gradient-to-r from-purple-900/50 to-pink-700/30",
-        text: "text-purple-300",
-        border: "border-purple-500/40",
-        icon: FaFigma,
-        iconColor: "text-purple-400",
-    },
-    Git: {
-        bg: "bg-gradient-to-r from-orange-900/50 to-red-700/30",
-        text: "text-orange-300",
-        border: "border-orange-500/40",
-        icon: FaGitAlt,
-        iconColor: "text-orange-400",
-    },
-};
+export default function TechBadge({
+    name,
+    small = false,
+    isSelected = false,
+    onClick = null,
+    selectable = false,
+    showIcon = true,
+}) {
+    // Warna untuk badge berdasarkan teknologi
+    const getBadgeColor = (techName) => {
+        const colors = {
+            React: "from-blue-500 to-cyan-500",
+            "Next.js": "from-black to-gray-700",
+            "Tailwind CSS": "from-cyan-500 to-blue-400",
+            JavaScript: "from-yellow-400 to-yellow-500",
+            "Node.js": "from-green-500 to-green-600",
+            MongoDB: "from-green-600 to-green-700",
+            Firebase: "from-yellow-500 to-orange-500",
+            Redux: "from-purple-600 to-indigo-600",
+            "Material UI": "from-blue-400 to-indigo-500",
+            Express: "from-gray-600 to-gray-700",
+            HTML: "from-orange-500 to-red-500",
+            CSS: "from-blue-400 to-blue-500",
+            "Framer Motion": "from-purple-500 to-pink-500",
+            TypeScript: "from-blue-600 to-blue-700",
+            "NextAuth.js": "from-indigo-500 to-purple-500",
+            "OpenWeather API": "from-cyan-600 to-blue-600",
+        };
 
-const getBadgeConfig = (tech) => {
-    return (
-        techConfig[tech] || {
-            bg: "bg-gradient-to-r from-gray-800/50 to-gray-700/30",
-            text: "text-gray-300",
-            border: "border-gray-600/40",
-            icon: FaCode,
-            iconColor: "text-gray-400",
-        }
-    );
-};
+        return colors[techName] || "from-gray-500 to-gray-600";
+    };
 
-export default function TechBadge({ name, small = false }) {
-    const { bg, text, border, icon: Icon, iconColor } = getBadgeConfig(name);
+    // Icon untuk badge
+    const getTechIcon = (techName) => {
+        const icons = {
+            React: "⚛️",
+            "Next.js": "▲",
+            "Tailwind CSS": "🌊",
+            JavaScript: "JS",
+            TypeScript: "TS",
+            "Node.js": "🟢",
+            MongoDB: "🍃",
+            Firebase: "🔥",
+            Redux: "↺",
+            "Material UI": "UI",
+            Express: "🚂",
+            HTML: "🌐",
+            CSS: "🎨",
+            "Framer Motion": "🔄",
+            "NextAuth.js": "🔒",
+            "OpenWeather API": "☁️",
+        };
+
+        return icons[techName] || "";
+    };
+
+    const badgeClasses = `
+        ${small ? "text-[0.6rem] px-2 py-0.5" : "text-xs px-2.5 py-1"} 
+        ${
+            selectable
+                ? "cursor-pointer transform transition-transform hover:scale-105"
+                : ""
+        } 
+        ${
+            isSelected
+                ? `bg-gradient-to-r ${getBadgeColor(
+                      name
+                  )} text-white ring-2 ring-white/30 shadow-lg shadow-${
+                      getBadgeColor(name).split(" ")[0]
+                  }/20`
+                : `bg-gray-800 text-gray-300 border border-gray-700/50 ${
+                      selectable ? "hover:bg-gray-700" : ""
+                  }`
+        } 
+        rounded-full font-medium shadow-sm flex items-center justify-center
+        ${selectable ? "cursor-pointer" : ""}
+    `;
 
     return (
-        <span
-            className={`
-        ${bg} ${text} ${border}
-        ${small ? "text-[0.65rem] px-2 py-0.5" : "text-xs px-2.5 py-1"} 
-        rounded-full border inline-flex items-center justify-center
-        font-medium hover:scale-105 transition-transform duration-300
-        shadow-sm hover:shadow-md backdrop-blur-sm
-      `}
+        <motion.span
+            className={badgeClasses}
+            onClick={onClick}
+            whileHover={selectable ? { scale: 1.05 } : {}}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
         >
-            {Icon && (
-                <span
-                    className={`mr-1 ${iconColor} ${
-                        small ? "text-xs" : "text-sm"
-                    }`}
-                >
-                    <Icon />
-                </span>
+            {showIcon && getTechIcon(name) && (
+                <span className="mr-1 text-xs">{getTechIcon(name)}</span>
             )}
-            {name}
-        </span>
+            <span>{name}</span>
+            {isSelected && selectable && (
+                <span className="ml-1 inline-block">&times;</span>
+            )}
+        </motion.span>
     );
 }
