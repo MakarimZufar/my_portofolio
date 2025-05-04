@@ -1,17 +1,15 @@
-// src/components/FeaturedProjects/FeaturedProjects.js
+// src/components/FeaturedProjects.js
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
 import { getFeaturedProjects } from "@/data/projectsData"; // Import fungsi untuk mendapatkan proyek unggulan
+import TechBadge from "@/components/TechBadge";
+import ProjectTag from "@/components/ProjectTag";
 
 // Menggunakan data dari projectsData.js
 const featuredProjects = getFeaturedProjects();
-
-// Import komponen TechBadge dan ProjectTag
-import TechBadge from "@/components/TechBadge";
-import ProjectTag from "@/components/ProjectTag";
 
 // Project Card
 const ProjectCard = ({ project, index }) => {

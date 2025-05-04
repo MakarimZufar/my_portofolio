@@ -1,3 +1,4 @@
+// src/components/ProjectCard.js
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,43 +10,8 @@ import {
     FaTimes,
     FaChevronDown,
 } from "react-icons/fa";
-
-// Komponen Badge Teknologi
-const TechBadge = ({ name, small }) => {
-    // Warna untuk badge berdasarkan teknologi
-    const getBadgeColor = (techName) => {
-        const colors = {
-            React: "from-blue-500 to-cyan-500",
-            "Next.js": "from-black to-gray-700",
-            "Tailwind CSS": "from-cyan-500 to-blue-400",
-            JavaScript: "from-yellow-400 to-yellow-500",
-            "Node.js": "from-green-500 to-green-600",
-            MongoDB: "from-green-600 to-green-700",
-            Firebase: "from-yellow-500 to-orange-500",
-            Redux: "from-purple-600 to-indigo-600",
-            "Material UI": "from-blue-400 to-indigo-500",
-            Express: "from-gray-600 to-gray-700",
-            HTML: "from-orange-500 to-red-500",
-            CSS: "from-blue-400 to-blue-500",
-            "NextAuth.js": "from-indigo-500 to-purple-500",
-        };
-
-        return colors[techName] || "from-gray-500 to-gray-600";
-    };
-
-    return (
-        <div
-            className={`
-            ${small ? "text-[0.6rem] px-2 py-0.5" : "text-xs px-2.5 py-1"} 
-            bg-gradient-to-r ${getBadgeColor(name)} text-white rounded-full 
-            font-medium shadow-sm flex items-center justify-center
-            border border-white/10
-        `}
-        >
-            {name}
-        </div>
-    );
-};
+import TechBadge from "@/components/TechBadge";
+import ProjectTag from "@/components/ProjectTag";
 
 export default function ProjectCard({ project, index }) {
     const [isExpanded, setIsExpanded] = useState(false);

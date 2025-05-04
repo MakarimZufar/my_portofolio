@@ -1,134 +1,103 @@
+// src/data/projectsData.js
 const projects = [
     {
-        id: "portfolio",
-        title: "Portfolio Website",
+        id: "weather-app",
+        title: "Aplikasi Cuaca Realtime",
         description:
-            "Website portofolio personal dengan Next.js dan Tailwind CSS. Fitur animasi halus dengan Framer Motion dan tampilan responsif untuk berbagai perangkat.",
-        technologies: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
+            "Aplikasi cuaca yang menampilkan data realtime dari berbagai kota di dunia dengan fitur perkiraan 5 hari ke depan dan visualisasi data.",
+        imageUrl: "/projects/weather-app.jpg",
         tags: ["Web", "Frontend"],
-        imageUrl: "/projects/portfolio.png",
-        demoUrl: "https://makarimzufar.vercel.app",
-        githubUrl: "https://github.com/MakarimZufar/portfolio",
+        technologies: [
+            "React",
+            "OpenWeather API",
+            "Tailwind CSS",
+            "Framer Motion",
+        ],
         featured: true,
-    },
-    {
-        id: "ecommerce",
-        title: "E-Commerce Dashboard",
-        description:
-            "Dashboard admin komprehensif untuk platform e-commerce dengan analitik real-time dan manajemen inventori. Mendukung berbagai peran pengguna dengan tingkat akses berbeda.",
-        technologies: ["React", "Material UI", "Node.js", "MongoDB", "Express"],
-        tags: ["Web", "Full Stack"],
-        imageUrl: "/projects/ecommerce.png",
-        demoUrl: "https://demo-ecommerce.example.com",
-        githubUrl: "https://github.com/MakarimZufar/ecommerce-dashboard",
-        featured: true,
-    },
-    {
-        id: "task-app",
-        title: "Task Management App",
-        description:
-            "Aplikasi manajemen tugas dengan otentikasi pengguna dan update real-time. Fitur drag-and-drop untuk mengelola tugas, notifikasi, dan kolaborasi tim.",
-        technologies: ["React", "Firebase", "Tailwind CSS", "Redux"],
-        tags: ["Mobile", "Web", "Full Stack"],
-        imageUrl: "/projects/taskapp.png",
-        demoUrl: "https://taskapp-demo.example.com",
-        githubUrl: "https://github.com/MakarimZufar/task-app",
-        featured: true,
-    },
-    {
-        id: "weather",
-        title: "Weather Application",
-        description:
-            "Aplikasi perkiraan cuaca real-time dengan layanan lokasi. Mendukung pencarian, simpan lokasi favorit, dan notifikasi kondisi cuaca ekstrem.",
-        technologies: ["JavaScript", "OpenWeather API", "HTML", "CSS"],
-        tags: ["Web", "Frontend"],
-        imageUrl: "/projects/weather.png",
-        demoUrl: "https://weather-app.example.com",
         githubUrl: "https://github.com/MakarimZufar/weather-app",
-        featured: false,
+        demoUrl: "https://weather-app-makarim.vercel.app",
     },
     {
-        id: "blog",
-        title: "Blog Platform",
+        id: "portfolio-v2",
+        title: "Portfolio Website v2",
         description:
-            "Sistem manajemen konten untuk blogger dengan dukungan markdown, komentar, dan analitik. Termasuk editor visual WYSIWYG dan SEO tools.",
-        technologies: ["Next.js", "MongoDB", "Tailwind CSS", "NextAuth.js"],
+            "Website portofolio pribadi yang dibangun dengan Next.js dan Tailwind CSS, menampilkan proyek-proyek dan kemampuan teknis secara interaktif.",
+        imageUrl: "/projects/portfolio.jpg",
+        tags: ["Web", "Frontend", "UI"],
+        technologies: ["Next.js", "Tailwind CSS", "Framer Motion", "React"],
+        featured: true,
+        githubUrl: "https://github.com/MakarimZufar/portfolio-v2",
+        demoUrl: "https://makarimzufar.vercel.app",
+    },
+    {
+        id: "blog-platform",
+        title: "Platform Blog",
+        description:
+            "Platform blog dengan fitur autentikasi, editor teks kaya, komentar, dan analitik. Mendukung markdown dan penyimpanan gambar.",
+        imageUrl: "/projects/blog-platform.jpg",
         tags: ["Web", "Full Stack"],
-        imageUrl: "/projects/blog.png",
-        demoUrl: "https://blog-platform.example.com",
+        technologies: ["Next.js", "MongoDB", "Tailwind CSS", "NextAuth.js"],
+        featured: true,
         githubUrl: "https://github.com/MakarimZufar/blog-platform",
-        featured: false,
+        demoUrl: "https://blog-platform-demo.vercel.app",
     },
     {
-        id: "mobile-app",
-        title: "Fitness Tracker",
+        id: "task-manager",
+        title: "Aplikasi Manajemen Tugas",
         description:
-            "Aplikasi mobile untuk melacak aktivitas fitness, diet, dan rutinitas olahraga. Menyediakan visualisasi data dan rekomendasi personalisasi.",
-        technologies: ["React Native", "Firebase", "Redux", "Expo"],
-        tags: ["Mobile", "Frontend"],
-        imageUrl: "/projects/fitness.png",
-        demoUrl: "https://fitness-app.example.com",
-        githubUrl: "https://github.com/MakarimZufar/fitness-app",
+            "Aplikasi manajemen tugas dan produktivitas dengan fitur kategori, prioritas, notifikasi, dan integrasi kalender.",
+        imageUrl: "/projects/task-manager.jpg",
+        tags: ["Web", "Full Stack"],
+        technologies: ["React", "Firebase", "Tailwind CSS", "Redux"],
         featured: false,
+        githubUrl: "https://github.com/MakarimZufar/task-manager",
+        demoUrl: "https://task-manager-zufar.vercel.app",
+    },
+    {
+        id: "e-commerce",
+        title: "Platform E-Commerce",
+        description:
+            "Platform e-commerce dengan sistem keranjang, checkout, pembayaran, dan manajemen produk untuk berbagai kategori barang.",
+        imageUrl: "/projects/e-commerce.jpg",
+        tags: ["Web", "Full Stack"],
+        technologies: ["Next.js", "Node.js", "MongoDB", "Stripe API"],
+        featured: false,
+        githubUrl: "https://github.com/MakarimZufar/e-commerce",
+        demoUrl: "https://e-commerce-zufar.vercel.app",
     },
     {
         id: "chat-app",
-        title: "Real-time Chat App",
+        title: "Aplikasi Chat Realtime",
         description:
-            "Aplikasi chatting real-time dengan fitur pengiriman pesan, notifikasi, dan berbagi file. Mendukung chat grup dan pesan pribadi.",
-        technologies: ["React", "Socket.io", "Node.js", "Express", "MongoDB"],
-        tags: ["Web", "Full Stack"],
-        imageUrl: "/projects/chat.png",
-        demoUrl: "https://chat-app.example.com",
-        githubUrl: "https://github.com/MakarimZufar/chat-app",
-        featured: false,
-    },
-    {
-        id: "food-delivery",
-        title: "Food Delivery Platform",
-        description:
-            "Platform pengiriman makanan dengan integrasi peta real-time, sistem pemesanan, dan manajemen restoran. Mendukung multiple payment gateway.",
-        technologies: ["React", "Node.js", "MongoDB", "Express", "Stripe API"],
+            "Aplikasi chat realtime dengan fitur grup, obrolan pribadi, berbagi file, dan notifikasi push.",
+        imageUrl: "/projects/chat-app.jpg",
         tags: ["Web", "Mobile", "Full Stack"],
-        imageUrl: "/projects/food.png",
-        demoUrl: "https://food-delivery.example.com",
-        githubUrl: "https://github.com/MakarimZufar/food-delivery",
+        technologies: ["React", "Firebase", "WebSockets", "Redux"],
         featured: false,
+        githubUrl: "https://github.com/MakarimZufar/chat-app",
+        demoUrl: "https://chat-app-zufar.vercel.app",
     },
 ];
 
-export function getAllProjects() {
-    return projects;
-}
+// Fungsi untuk mendapatkan semua proyek
+export const getAllProjects = () => projects;
 
-export function getFeaturedProjects() {
-    return projects.filter((project) => project.featured);
-}
+// Fungsi untuk mendapatkan proyek tertentu berdasarkan ID
+export const getProjectById = (id) =>
+    projects.find((project) => project.id === id);
 
-export function getProjectById(id) {
-    return projects.find((project) => project.id === id);
-}
+// Fungsi untuk mendapatkan proyek-proyek unggulan
+export const getFeaturedProjects = () =>
+    projects.filter((project) => project.featured);
 
-export function getProjectsByTag(tag) {
-    return projects.filter((project) => project.tags.includes(tag));
-}
+// Fungsi untuk mendapatkan semua tags unik
+export const getAllTags = () => {
+    const allTags = projects.flatMap((project) => project.tags);
+    return [...new Set(allTags)];
+};
 
-export function getProjectsByTech(tech) {
-    return projects.filter((project) => project.technologies.includes(tech));
-}
-
-export function getAllTags() {
-    const tags = new Set();
-    projects.forEach((project) => {
-        project.tags.forEach((tag) => tags.add(tag));
-    });
-    return [...tags];
-}
-
-export function getAllTechnologies() {
-    const techs = new Set();
-    projects.forEach((project) => {
-        project.technologies.forEach((tech) => techs.add(tech));
-    });
-    return [...techs];
-}
+// Fungsi untuk mendapatkan semua teknologi unik
+export const getAllTechnologies = () => {
+    const allTechnologies = projects.flatMap((project) => project.technologies);
+    return [...new Set(allTechnologies)];
+};

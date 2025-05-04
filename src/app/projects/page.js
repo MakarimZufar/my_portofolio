@@ -16,114 +16,13 @@ import {
     getAllTechnologies,
 } from "@/data/projectsData";
 import Image from "next/image";
+import TechBadge from "@/components/TechBadge";
+import ProjectTag from "@/components/ProjectTag";
 
 // Import data proyek dari projectsData.js
 const allProjects = getAllProjects();
-
-// Komponen Badge Teknologi
-const TechBadge = ({
-    name,
-    isSelected = false,
-    onClick = null,
-    selectable = false,
-}) => {
-    // Warna untuk badge berdasarkan teknologi
-    const getBadgeColor = (techName) => {
-        const colors = {
-            React: "from-blue-500 to-cyan-500",
-            "Next.js": "from-black to-gray-700",
-            "Tailwind CSS": "from-cyan-500 to-blue-400",
-            JavaScript: "from-yellow-400 to-yellow-500",
-            "Node.js": "from-green-500 to-green-600",
-            MongoDB: "from-green-600 to-green-700",
-            Firebase: "from-yellow-500 to-orange-500",
-            Redux: "from-purple-600 to-indigo-600",
-            "Material UI": "from-blue-400 to-indigo-500",
-            Express: "from-gray-600 to-gray-700",
-            HTML: "from-orange-500 to-red-500",
-            CSS: "from-blue-400 to-blue-500",
-            "Framer Motion": "from-purple-500 to-pink-500",
-            "OpenWeather API": "from-cyan-600 to-blue-600",
-            "NextAuth.js": "from-indigo-500 to-purple-500",
-        };
-
-        return colors[techName] || "from-gray-500 to-gray-600";
-    };
-
-    const badgeClasses = `
-        text-xs px-2 py-1 
-        ${
-            selectable
-                ? "cursor-pointer transform transition-transform hover:scale-105"
-                : ""
-        } 
-        ${
-            isSelected
-                ? `bg-gradient-to-r ${getBadgeColor(
-                      name
-                  )} text-white ring-2 ring-white/30 shadow-lg shadow-${
-                      getBadgeColor(name).split(" ")[0]
-                  }/20`
-                : "bg-gray-800 text-gray-300"
-        } 
-        rounded-full font-medium
-    `;
-
-    return (
-        <span className={badgeClasses} onClick={onClick}>
-            {name}
-            {isSelected && selectable && (
-                <span className="ml-1 inline-block">&times;</span>
-            )}
-        </span>
-    );
-};
-
-// Komponen Project Tag
-const ProjectTag = ({
-    name,
-    isSelected = false,
-    onClick = null,
-    selectable = false,
-}) => {
-    // Warna untuk tag berdasarkan kategori
-    const getTagColor = (tagName) => {
-        const colors = {
-            Web: "bg-blue-600",
-            Mobile: "bg-green-600",
-            "Full Stack": "bg-purple-600",
-            Frontend: "bg-cyan-600",
-            Backend: "bg-amber-600",
-            UI: "bg-pink-600",
-        };
-
-        return colors[tagName] || "bg-gray-600";
-    };
-
-    const tagClasses = `
-        text-xs px-2 py-1
-        ${
-            selectable
-                ? "cursor-pointer transform transition-transform hover:scale-105"
-                : ""
-        } 
-        ${
-            isSelected
-                ? `${getTagColor(name)} text-white ring-2 ring-white/30`
-                : "bg-gray-800 text-gray-300"
-        } 
-        rounded-md font-medium
-    `;
-
-    return (
-        <span className={tagClasses} onClick={onClick}>
-            {name}
-            {isSelected && selectable && (
-                <span className="ml-1 inline-block">&times;</span>
-            )}
-        </span>
-    );
-};
+const allTags = getAllTags();
+const allTechnologies = getAllTechnologies();
 
 // Komponen Project Card
 const ProjectCard = ({ project }) => {
@@ -216,8 +115,7 @@ const ProjectCard = ({ project }) => {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-white flex items-center gap-1.5 text-sm transition-colors"
-                >
+                    className="text-gray-400 hover:text-white flex items-center gap-1.5 text-sm transition-colors">
                     <FaGithub /> GitHub
                 </a>
                 <a
@@ -355,10 +253,6 @@ const FilterDropdown = ({
 };
 
 export default function ProjectsPage() {
-    // Mendapatkan semua tag dan teknologi
-    const allTags = getAllTags();
-    const allTechnologies = getAllTechnologies();
-
     // State untuk filter dan pencarian
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedTechs, setSelectedTechs] = useState([]);
