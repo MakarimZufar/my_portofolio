@@ -180,18 +180,14 @@ export default function IntroCard() {
                         </Link>
                         <Link
                             href="/contact"
-                            legacyBehavior
+                            className="relative group px-6 py-2 rounded-full border border-blue-500 text-white bg-transparent shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:shadow-[0_10px_20px_rgba(0,255,255,0.5)]"
+                            onMouseEnter={handleButtonHover}
+                            onMouseLeave={handleButtonLeave}
                         >
-                            <a 
-                                className="relative group px-6 py-2 rounded-full border border-blue-500 text-white bg-transparent shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:shadow-[0_10px_20px_rgba(0,255,255,0.5)]"
-                                onMouseEnter={handleButtonHover}
-                                onMouseLeave={handleButtonLeave}
-                            >
-                                <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm rounded-full"></span>
-                                <span className="relative z-10 font-medium inline-block">
-                                    {contactMessages[messageIndex]}
-                                </span>
-                            </a>
+                            <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm rounded-full"></span>
+                            <span className="relative z-10 font-medium inline-block">
+                                {contactMessages[messageIndex]}
+                            </span>
                         </Link>
                     </div>
                 </div>
