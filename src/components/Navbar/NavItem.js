@@ -129,7 +129,7 @@ const NavItem = ({
                     onClick(href);
                 }}
                 className="relative group"
-                legacyBehavior>
+            >
                 <div
                     className={`p-3 rounded-full relative transition-all duration-500 ${
                         isActive && !secretMode

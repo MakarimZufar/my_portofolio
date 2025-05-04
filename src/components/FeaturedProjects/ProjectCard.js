@@ -369,7 +369,7 @@ export default function ProjectCard({ project, index }) {
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                             }}
-                                            legacyBehavior>
+                                        >
                                             <FaInfoCircle />
                                             <span>Detail</span>
                                         </Link>

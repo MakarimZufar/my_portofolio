@@ -356,14 +356,11 @@ export default function NotFound() {
 
                 {/* Action buttons */}
                 <div className="flex justify-center gap-4 p-6 bg-gray-900">
-                    <Link href="/" legacyBehavior>
-                        <motion.button
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            <FaHome /> Home
-                        </motion.button>
+                    <Link
+                        href="/"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2"
+                    >
+                        <FaHome /> Home
                     </Link>
 
                     <motion.button
