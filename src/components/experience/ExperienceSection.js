@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import ExperienceCard from "./ExperienceCard";
 import VerticalTimeline from "./VerticalTimeline";
 import ParticlesBackground from "../../styles/ParticlesBackground";
-import ExperienceStyles from "../../styles/ExperienceStyles";
+import ExperienceStyles from "./ExperienceStyles";
 import experienceData from "../../data/experienceData";
 import { processTimelineData } from "./utils";
 
