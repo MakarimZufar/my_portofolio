@@ -125,7 +125,6 @@ export default function NotFound() {
         <div className="fixed inset-0 z-50 bg-gray-900 text-white flex flex-col items-center justify-center p-6 overflow-hidden">
             {/* Audio untuk click sound */}
             <audio ref={clickSoundRef} src="/click.mp3" preload="auto" />
-
             <style jsx global>{`
                 @keyframes glitch-animation {
                     0% {
@@ -238,7 +237,6 @@ export default function NotFound() {
                     animation: scanner 3s linear infinite;
                 }
             `}</style>
-
             {/* Animated code elements */}
             {fallingCodeElements.map((item) => (
                 <motion.div
@@ -268,7 +266,6 @@ export default function NotFound() {
                     {Math.random() > 0.5 ? " />" : ">"}
                 </motion.div>
             ))}
-
             {/* Matrix effect for hacking mode */}
             {isHacking && (
                 <div className="fixed inset-0 bg-black bg-opacity-80 z-20 flex items-center justify-center">
@@ -284,7 +281,6 @@ export default function NotFound() {
                     </motion.div>
                 </div>
             )}
-
             {/* Container utama */}
             <motion.div
                 className="relative z-10 max-w-xl w-full bg-gray-800 rounded-lg overflow-hidden shadow-2xl border border-gray-700"
@@ -360,7 +356,7 @@ export default function NotFound() {
 
                 {/* Action buttons */}
                 <div className="flex justify-center gap-4 p-6 bg-gray-900">
-                    <Link href="/">
+                    <Link href="/" legacyBehavior>
                         <motion.button
                             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center gap-2"
                             whileHover={{ scale: 1.05 }}
@@ -403,7 +399,6 @@ export default function NotFound() {
                     </motion.button>
                 </div>
             </motion.div>
-
             {/* Footer message */}
             <motion.div
                 className="mt-8 text-gray-500 text-center"

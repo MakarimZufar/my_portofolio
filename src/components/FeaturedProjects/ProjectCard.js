@@ -99,10 +99,8 @@ export default function ProjectCard({ project, index }) {
                     repeatDelay: 0.5,
                 }}
             />
-
             {/* Gradient Border Effect */}
             <div className="absolute inset-0 rounded-lg p-[1px] bg-gradient-to-br from-cyan-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
             {/* Card Content */}
             <div className="relative h-full p-4 bg-gray-900/70 backdrop-blur-md rounded-lg border border-gray-800/70 flex flex-col justify-between z-10">
                 {/* Project Title and Emoji */}
@@ -176,7 +174,6 @@ export default function ProjectCard({ project, index }) {
                     </div>
                 )}
             </div>
-
             {/* Expanding View With Modal Animation */}
             <AnimatePresence>
                 {isExpanded && (
@@ -372,7 +369,7 @@ export default function ProjectCard({ project, index }) {
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                             }}
-                                        >
+                                            legacyBehavior>
                                             <FaInfoCircle />
                                             <span>Detail</span>
                                         </Link>
