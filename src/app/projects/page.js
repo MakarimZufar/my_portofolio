@@ -2,15 +2,31 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaFilter, FaTimes, FaChevronDown, FaSearch, FaGithub, FaExternalLinkAlt } from "react-icons/fa";
-import { getAllProjects, getAllTags, getAllTechnologies } from "@/data/projectsData";
+import {
+    FaFilter,
+    FaTimes,
+    FaChevronDown,
+    FaSearch,
+    FaGithub,
+    FaExternalLinkAlt,
+} from "react-icons/fa";
+import {
+    getAllProjects,
+    getAllTags,
+    getAllTechnologies,
+} from "@/data/projectsData";
 import Image from "next/image";
 
 // Import data proyek dari projectsData.js
 const allProjects = getAllProjects();
 
 // Komponen Badge Teknologi
-const TechBadge = ({ name, isSelected = false, onClick = null, selectable = false }) => {
+const TechBadge = ({
+    name,
+    isSelected = false,
+    onClick = null,
+    selectable = false,
+}) => {
     // Warna untuk badge berdasarkan teknologi
     const getBadgeColor = (techName) => {
         const colors = {
@@ -36,18 +52,25 @@ const TechBadge = ({ name, isSelected = false, onClick = null, selectable = fals
 
     const badgeClasses = `
         text-xs px-2 py-1 
-        ${selectable ? 'cursor-pointer transform transition-transform hover:scale-105' : ''} 
-        ${isSelected 
-            ? `bg-gradient-to-r ${getBadgeColor(name)} text-white ring-2 ring-white/30 shadow-lg shadow-${getBadgeColor(name).split(' ')[0]}/20` 
-            : 'bg-gray-800 text-gray-300'} 
+        ${
+            selectable
+                ? "cursor-pointer transform transition-transform hover:scale-105"
+                : ""
+        } 
+        ${
+            isSelected
+                ? `bg-gradient-to-r ${getBadgeColor(
+                      name
+                  )} text-white ring-2 ring-white/30 shadow-lg shadow-${
+                      getBadgeColor(name).split(" ")[0]
+                  }/20`
+                : "bg-gray-800 text-gray-300"
+        } 
         rounded-full font-medium
     `;
 
     return (
-        <span
-            className={badgeClasses}
-            onClick={onClick}
-        >
+        <span className={badgeClasses} onClick={onClick}>
             {name}
             {isSelected && selectable && (
                 <span className="ml-1 inline-block">&times;</span>
@@ -57,7 +80,12 @@ const TechBadge = ({ name, isSelected = false, onClick = null, selectable = fals
 };
 
 // Komponen Project Tag
-const ProjectTag = ({ name, isSelected = false, onClick = null, selectable = false }) => {
+const ProjectTag = ({
+    name,
+    isSelected = false,
+    onClick = null,
+    selectable = false,
+}) => {
     // Warna untuk tag berdasarkan kategori
     const getTagColor = (tagName) => {
         const colors = {
@@ -74,18 +102,21 @@ const ProjectTag = ({ name, isSelected = false, onClick = null, selectable = fal
 
     const tagClasses = `
         text-xs px-2 py-1
-        ${selectable ? 'cursor-pointer transform transition-transform hover:scale-105' : ''} 
-        ${isSelected 
-            ? `${getTagColor(name)} text-white ring-2 ring-white/30` 
-            : 'bg-gray-800 text-gray-300'} 
+        ${
+            selectable
+                ? "cursor-pointer transform transition-transform hover:scale-105"
+                : ""
+        } 
+        ${
+            isSelected
+                ? `${getTagColor(name)} text-white ring-2 ring-white/30`
+                : "bg-gray-800 text-gray-300"
+        } 
         rounded-md font-medium
     `;
 
     return (
-        <span
-            className={tagClasses}
-            onClick={onClick}
-        >
+        <span className={tagClasses} onClick={onClick}>
             {name}
             {isSelected && selectable && (
                 <span className="ml-1 inline-block">&times;</span>
@@ -104,14 +135,14 @@ const ProjectCard = ({ project }) => {
             transition={{ duration: 0.4 }}
             className="bg-gradient-to-br from-gray-900 to-gray-950 rounded-xl overflow-hidden shadow-lg group hover:shadow-cyan-500/10 transition-all duration-300 border border-gray-800 h-full"
         >
-                            {/* Project Image */}
+            {/* Project Image */}
             <div className="h-48 relative overflow-hidden">
                 {/* Placeholder image atau image dari project */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-blue-500/20 z-0"></div>
                 {project.imageUrl ? (
                     <div className="h-full w-full relative">
-                        <Image 
-                            src={project.imageUrl} 
+                        <Image
+                            src={project.imageUrl}
                             alt={project.title}
                             fill
                             className="object-cover"
@@ -122,24 +153,26 @@ const ProjectCard = ({ project }) => {
                         {/* Placeholder emoji berdasarkan jenis proyek */}
                         {project.tags.includes("Web") && "🌐"}
                         {project.tags.includes("Mobile") && "📱"}
-                        {!project.tags.includes("Web") && !project.tags.includes("Mobile") && "💻"}
+                        {!project.tags.includes("Web") &&
+                            !project.tags.includes("Mobile") &&
+                            "💻"}
                     </div>
                 )}
-                
+
                 {/* Tags positioned at the top */}
                 <div className="absolute top-2 left-2 flex flex-wrap gap-1 z-10">
-                    {project.tags.map(tag => (
+                    {project.tags.map((tag) => (
                         <ProjectTag key={tag} name={tag} />
                     ))}
                 </div>
-                
+
                 {/* Featured badge if applicable */}
                 {project.featured && (
                     <div className="absolute top-2 right-2 z-10">
                         <motion.div
-                            animate={{ 
+                            animate={{
                                 scale: [1, 1.1, 1],
-                                rotate: [0, 2, 0, -2, 0]
+                                rotate: [0, 2, 0, -2, 0],
                             }}
                             transition={{ duration: 2, repeat: Infinity }}
                             className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold"
@@ -149,7 +182,7 @@ const ProjectCard = ({ project }) => {
                     </div>
                 )}
             </div>
-            
+
             {/* Project Content */}
             <div className="p-5 h-56 flex flex-col justify-between">
                 <div>
@@ -160,12 +193,12 @@ const ProjectCard = ({ project }) => {
                         {project.description}
                     </p>
                 </div>
-                
+
                 {/* Technologies */}
                 <div>
                     <div className="text-xs text-gray-500 mb-2">Teknologi:</div>
                     <div className="flex flex-wrap gap-1">
-                        {project.technologies.slice(0, 4).map(tech => (
+                        {project.technologies.slice(0, 4).map((tech) => (
                             <TechBadge key={tech} name={tech} />
                         ))}
                         {project.technologies.length > 4 && (
@@ -176,27 +209,27 @@ const ProjectCard = ({ project }) => {
                     </div>
                 </div>
             </div>
-            
+
             {/* Action Buttons */}
             <div className="flex justify-between items-center p-5 border-t border-gray-800">
-                <a 
-                    href={project.githubUrl} 
-                    target="_blank" 
+                <a
+                    href={project.githubUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white flex items-center gap-1.5 text-sm transition-colors"
                 >
                     <FaGithub /> GitHub
                 </a>
-                <a 
-                    href={project.demoUrl} 
-                    target="_blank" 
+                <a
+                    href={project.demoUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-colors"
                 >
                     <FaExternalLinkAlt /> Demo
                 </a>
             </div>
-            
+
             {/* Hover Effect - glowing border */}
             <div className="absolute inset-0 rounded-xl p-0.5 bg-gradient-to-r from-cyan-500 via-transparent to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </motion.div>
@@ -204,27 +237,37 @@ const ProjectCard = ({ project }) => {
 };
 
 // Filter Dropdown Component
-const FilterDropdown = ({ title, options, selectedValues, onSelect, onClear }) => {
+const FilterDropdown = ({
+    title,
+    options,
+    selectedValues,
+    onSelect,
+    onClear,
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
                 setIsOpen(false);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
 
     // Handle selection of option
     const handleSelect = (option) => {
         onSelect(option);
+        // Don't close the dropdown after selection to allow multiple selections
     };
 
     return (
@@ -243,13 +286,17 @@ const FilterDropdown = ({ title, options, selectedValues, onSelect, onClear }) =
                         {selectedValues.length}
                     </span>
                 )}
-                <FaChevronDown className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                <FaChevronDown
+                    className={`transition-transform ${
+                        isOpen ? "rotate-180" : ""
+                    }`}
+                />
             </button>
-            
+
             {/* Selected values display */}
             {selectedValues.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2 max-w-md">
-                    {selectedValues.map(value => (
+                    {selectedValues.map((value) => (
                         <motion.span
                             key={value}
                             initial={{ scale: 0.8 }}
@@ -265,7 +312,7 @@ const FilterDropdown = ({ title, options, selectedValues, onSelect, onClear }) =
                             </button>
                         </motion.span>
                     ))}
-                    
+
                     <button
                         onClick={onClear}
                         className="text-xs px-2 py-1 rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600"
@@ -274,7 +321,7 @@ const FilterDropdown = ({ title, options, selectedValues, onSelect, onClear }) =
                     </button>
                 </div>
             )}
-            
+
             {/* Dropdown content */}
             <AnimatePresence>
                 {isOpen && (
@@ -286,7 +333,7 @@ const FilterDropdown = ({ title, options, selectedValues, onSelect, onClear }) =
                         className="absolute z-30 mt-2 w-56 max-h-60 overflow-y-auto bg-gray-900 border border-gray-700 rounded-lg shadow-xl"
                     >
                         <div className="p-2 flex flex-wrap gap-1.5">
-                            {options.map(option => (
+                            {options.map((option) => (
                                 <span
                                     key={option}
                                     onClick={() => handleSelect(option)}
@@ -311,74 +358,79 @@ export default function ProjectsPage() {
     // Mendapatkan semua tag dan teknologi
     const allTags = getAllTags();
     const allTechnologies = getAllTechnologies();
-    
+
     // State untuk filter dan pencarian
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedTechs, setSelectedTechs] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
     const [isFilterExpanded, setIsFilterExpanded] = useState(false);
     const [filteredProjects, setFilteredProjects] = useState(allProjects);
-    
+
     // Filter proyek berdasarkan kriteria yang dipilih
     useEffect(() => {
         let filtered = allProjects;
-        
+
         // Filter berdasarkan tag
         if (selectedTags.length > 0) {
-            filtered = filtered.filter(project => 
-                selectedTags.every(tag => project.tags.includes(tag))
+            filtered = filtered.filter((project) =>
+                selectedTags.every((tag) => project.tags.includes(tag))
             );
         }
-        
+
         // Filter berdasarkan teknologi
         if (selectedTechs.length > 0) {
-            filtered = filtered.filter(project => 
-                selectedTechs.every(tech => project.technologies.includes(tech))
+            filtered = filtered.filter((project) =>
+                selectedTechs.every((tech) =>
+                    project.technologies.includes(tech)
+                )
             );
         }
-        
+
         // Filter berdasarkan pencarian
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(project => 
-                project.title.toLowerCase().includes(query) || 
-                project.description.toLowerCase().includes(query) || 
-                project.technologies.some(tech => tech.toLowerCase().includes(query)) ||
-                project.tags.some(tag => tag.toLowerCase().includes(query))
+            filtered = filtered.filter(
+                (project) =>
+                    project.title.toLowerCase().includes(query) ||
+                    project.description.toLowerCase().includes(query) ||
+                    project.technologies.some((tech) =>
+                        tech.toLowerCase().includes(query)
+                    ) ||
+                    project.tags.some((tag) =>
+                        tag.toLowerCase().includes(query)
+                    )
             );
         }
-        
+
         setFilteredProjects(filtered);
     }, [selectedTags, selectedTechs, searchQuery]);
-    
+
     // Toggle tag selection
     const toggleTag = (tag) => {
-        setSelectedTags(prev => 
-            prev.includes(tag) ? 
-                prev.filter(t => t !== tag) : 
-                [...prev, tag]
+        setSelectedTags((prev) =>
+            prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
         );
     };
-    
+
     // Toggle technology selection
     const toggleTech = (tech) => {
-        setSelectedTechs(prev => 
-            prev.includes(tech) ? 
-                prev.filter(t => t !== tech) : 
-                [...prev, tech]
+        setSelectedTechs((prev) =>
+            prev.includes(tech)
+                ? prev.filter((t) => t !== tech)
+                : [...prev, tech]
         );
     };
-    
+
     // Clear all filters
     const clearAllFilters = () => {
         setSelectedTags([]);
         setSelectedTechs([]);
-        setSearchQuery('');
+        setSearchQuery("");
     };
-    
+
     // Referensi untuk container filter untuk animasi
     const filterContainerRef = useRef(null);
-    
+
     return (
         <main className="min-h-screen py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-gray-900 to-black">
             <div className="max-w-7xl mx-auto">
@@ -404,11 +456,12 @@ export default function ProjectsPage() {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="text-gray-400 max-w-2xl mx-auto"
                     >
-                        Kumpulan proyek yang telah saya kerjakan, mencakup berbagai teknologi dan
-                        solusi inovatif untuk berbagai kebutuhan.
+                        Kumpulan proyek yang telah saya kerjakan, mencakup
+                        berbagai teknologi dan solusi inovatif untuk berbagai
+                        kebutuhan.
                     </motion.p>
                 </div>
-                
+
                 {/* Search and Filter Section */}
                 <div className="mb-10">
                     <div className="flex flex-col lg:flex-row justify-between gap-4 items-start lg:items-center mb-6">
@@ -424,47 +477,51 @@ export default function ProjectsPage() {
                             />
                             {searchQuery && (
                                 <button
-                                    onClick={() => setSearchQuery('')}
+                                    onClick={() => setSearchQuery("")}
                                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
                                 >
                                     <FaTimes />
                                 </button>
                             )}
                         </div>
-                        
+
                         {/* Filter Button (Mobile) */}
                         <button
-                            onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                            onClick={() =>
+                                setIsFilterExpanded(!isFilterExpanded)
+                            }
                             className="lg:hidden px-4 py-2 bg-gray-800 rounded-full flex items-center gap-2 text-gray-300 border border-gray-700"
                         >
                             <FaFilter />
                             <span>Filter</span>
-                            {(selectedTags.length > 0 || selectedTechs.length > 0) && (
+                            {(selectedTags.length > 0 ||
+                                selectedTechs.length > 0) && (
                                 <span className="bg-cyan-600 text-white text-xs px-1.5 py-0.5 rounded-full">
                                     {selectedTags.length + selectedTechs.length}
                                 </span>
                             )}
                         </button>
-                        
+
                         {/* Desktop Filters */}
                         <div className="hidden lg:flex gap-3">
-                            <FilterDropdown 
+                            <FilterDropdown
                                 title="Kategori"
                                 options={allTags}
                                 selectedValues={selectedTags}
                                 onSelect={toggleTag}
                                 onClear={() => setSelectedTags([])}
                             />
-                            
-                            <FilterDropdown 
+
+                            <FilterDropdown
                                 title="Teknologi"
                                 options={allTechnologies}
                                 selectedValues={selectedTechs}
                                 onSelect={toggleTech}
                                 onClear={() => setSelectedTechs([])}
                             />
-                            
-                            {(selectedTags.length > 0 || selectedTechs.length > 0) && (
+
+                            {(selectedTags.length > 0 ||
+                                selectedTechs.length > 0) && (
                                 <button
                                     onClick={clearAllFilters}
                                     className="px-4 py-2 text-sm bg-gray-800 text-gray-300 rounded-full border border-gray-700 hover:bg-gray-700"
@@ -474,28 +531,34 @@ export default function ProjectsPage() {
                             )}
                         </div>
                     </div>
-                    
+
                     {/* Mobile Filters - Expandable */}
                     <AnimatePresence>
                         {isFilterExpanded && (
                             <motion.div
                                 ref={filterContainerRef}
                                 initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
+                                animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
                                 className="lg:hidden overflow-hidden"
                             >
                                 <div className="p-4 bg-gray-900 rounded-xl border border-gray-800 mb-4">
                                     <div className="mb-4">
-                                        <h3 className="text-sm font-semibold text-gray-300 mb-2">Kategori:</h3>
+                                        <h3 className="text-sm font-semibold text-gray-300 mb-2">
+                                            Kategori:
+                                        </h3>
                                         <div className="flex flex-wrap gap-2">
-                                            {allTags.map(tag => (
+                                            {allTags.map((tag) => (
                                                 <span
                                                     key={tag}
-                                                    onClick={() => toggleTag(tag)}
+                                                    onClick={() =>
+                                                        toggleTag(tag)
+                                                    }
                                                     className={`text-xs px-2 py-1 rounded-full cursor-pointer ${
-                                                        selectedTags.includes(tag)
+                                                        selectedTags.includes(
+                                                            tag
+                                                        )
                                                             ? "bg-cyan-600 text-white"
                                                             : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                                                     }`}
@@ -505,16 +568,22 @@ export default function ProjectsPage() {
                                             ))}
                                         </div>
                                     </div>
-                                    
+
                                     <div className="mb-4">
-                                        <h3 className="text-sm font-semibold text-gray-300 mb-2">Teknologi:</h3>
+                                        <h3 className="text-sm font-semibold text-gray-300 mb-2">
+                                            Teknologi:
+                                        </h3>
                                         <div className="flex flex-wrap gap-2">
-                                            {allTechnologies.map(tech => (
+                                            {allTechnologies.map((tech) => (
                                                 <span
                                                     key={tech}
-                                                    onClick={() => toggleTech(tech)}
+                                                    onClick={() =>
+                                                        toggleTech(tech)
+                                                    }
                                                     className={`text-xs px-2 py-1 rounded-full cursor-pointer ${
-                                                        selectedTechs.includes(tech)
+                                                        selectedTechs.includes(
+                                                            tech
+                                                        )
                                                             ? "bg-cyan-600 text-white"
                                                             : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                                                     }`}
@@ -524,8 +593,9 @@ export default function ProjectsPage() {
                                             ))}
                                         </div>
                                     </div>
-                                    
-                                    {(selectedTags.length > 0 || selectedTechs.length > 0) && (
+
+                                    {(selectedTags.length > 0 ||
+                                        selectedTechs.length > 0) && (
                                         <button
                                             onClick={clearAllFilters}
                                             className="w-full px-4 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700"
@@ -537,12 +607,14 @@ export default function ProjectsPage() {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                    
+
                     {/* Active Filters Display */}
                     {(selectedTags.length > 0 || selectedTechs.length > 0) && (
                         <div className="flex flex-wrap gap-2 mb-4">
-                            <span className="text-sm text-gray-400">Filter Aktif:</span>
-                            {selectedTags.map(tag => (
+                            <span className="text-sm text-gray-400">
+                                Filter Aktif:
+                            </span>
+                            {selectedTags.map((tag) => (
                                 <motion.span
                                     key={tag}
                                     initial={{ scale: 0.8 }}
@@ -558,8 +630,8 @@ export default function ProjectsPage() {
                                     </button>
                                 </motion.span>
                             ))}
-                            
-                            {selectedTechs.map(tech => (
+
+                            {selectedTechs.map((tech) => (
                                 <motion.span
                                     key={tech}
                                     initial={{ scale: 0.8 }}
@@ -578,16 +650,19 @@ export default function ProjectsPage() {
                         </div>
                     )}
                 </div>
-                
+
                 {/* Project Grid with Animation */}
                 <AnimatePresence>
                     {filteredProjects.length > 0 ? (
-                        <motion.div 
+                        <motion.div
                             layout
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         >
-                            {filteredProjects.map(project => (
-                                <ProjectCard key={project.id} project={project} />
+                            {filteredProjects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                />
                             ))}
                         </motion.div>
                     ) : (
@@ -598,9 +673,12 @@ export default function ProjectsPage() {
                             className="text-center py-10"
                         >
                             <div className="text-5xl mb-4">😕</div>
-                            <h3 className="text-xl font-bold text-gray-300 mb-2">Tidak Ada Proyek yang Ditemukan</h3>
+                            <h3 className="text-xl font-bold text-gray-300 mb-2">
+                                Tidak Ada Proyek yang Ditemukan
+                            </h3>
                             <p className="text-gray-400">
-                                Tidak ada proyek yang cocok dengan filter yang Anda pilih.
+                                Tidak ada proyek yang cocok dengan filter yang
+                                Anda pilih.
                             </p>
                             <button
                                 onClick={clearAllFilters}
