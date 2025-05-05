@@ -2,20 +2,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-    FaGithub,
-    FaExternalLinkAlt,
-    FaInfoCircle,
-    FaTimes,
-    FaChevronDown,
-} from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaChevronDown } from "react-icons/fa";
 import TechBadge from "@/components/TechBadge";
 import ProjectTag from "@/components/ProjectTag";
 
-export default function ProjectCard({ project, index }) {
-    const [isExpanded, setIsExpanded] = useState(false);
-
+export default function ProjectCard({ project, index, onClick }) {
     // Emoji berdasarkan index
     const getEmoji = (index) => {
         const emojis = ["💻", "📱", "🚀", "📊", "🛠️", "🤖"];
@@ -35,11 +27,19 @@ export default function ProjectCard({ project, index }) {
         return gradients[index % gradients.length];
     };
 
+    // Handle card click - call the onClick prop passed from the parent
+    const handleClick = (event) => {
+        event.stopPropagation();
+        if (onClick) {
+            onClick(project);
+        }
+    };
+
     return (
         <motion.div
             className={`group relative w-64 h-60 md:w-full bg-gradient-to-br ${getGradientByIndex(
                 index
-            )} rounded-lg overflow-hidden`}
+            )} rounded-lg overflow-hidden cursor-pointer`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -49,7 +49,7 @@ export default function ProjectCard({ project, index }) {
                 boxShadow: "0 10px 25px -5px rgba(6, 182, 212, 0.5)",
                 transition: { duration: 0.3 },
             }}
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleClick}
         >
             {/* Shimmer Effect */}
             <motion.div
@@ -140,238 +140,6 @@ export default function ProjectCard({ project, index }) {
                     </div>
                 )}
             </div>
-            {/* Expanding View With Modal Animation */}
-            <AnimatePresence>
-                {isExpanded && (
-                    <motion.div
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-hidden"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={(e) => {
-                            // Tutup modal jika klik di luar konten
-                            if (e.target === e.currentTarget)
-                                setIsExpanded(false);
-                        }}
-                    >
-                        <motion.div
-                            className="relative bg-gradient-to-br from-gray-900 to-black p-1 rounded-xl w-full max-w-md overflow-hidden"
-                            initial={{ scale: 0.9, y: 20, opacity: 0 }}
-                            animate={{ scale: 1, y: 0, opacity: 1 }}
-                            exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                            transition={{
-                                type: "spring",
-                                damping: 25,
-                                stiffness: 300,
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {/* Gradient border */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 via-purple-500 to-blue-500 rounded-xl p-[1px]" />
-
-                            {/* Content container */}
-                            <div className="bg-gray-900 rounded-xl p-5 relative z-10">
-                                {/* Close button */}
-                                <button
-                                    onClick={() => setIsExpanded(false)}
-                                    className="absolute top-3 right-3 text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 p-1.5 rounded-full transition-colors z-20"
-                                    aria-label="Close details"
-                                >
-                                    <FaTimes size={16} />
-                                </button>
-
-                                {/* Project title with animated underline */}
-                                <div className="mb-4 relative">
-                                    <motion.h3
-                                        className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300"
-                                        initial={{ y: -20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.1 }}
-                                    >
-                                        {project.title}
-                                    </motion.h3>
-                                    <motion.div
-                                        className="h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
-                                        initial={{ width: 0, opacity: 0 }}
-                                        animate={{ width: "50%", opacity: 1 }}
-                                        transition={{
-                                            delay: 0.3,
-                                            duration: 0.5,
-                                        }}
-                                    />
-                                </div>
-
-                                {/* Project image (can be mocked if no real images) */}
-                                <motion.div
-                                    className="mb-4 h-40 relative bg-gray-800 rounded-lg overflow-hidden"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
-                                >
-                                    {project.imageUrl ? (
-                                        <Image
-                                            src={project.imageUrl}
-                                            alt={project.title}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                                            <span className="text-5xl filter drop-shadow-lg">
-                                                {getEmoji(index)}
-                                            </span>
-                                        </div>
-                                    )}
-                                </motion.div>
-
-                                {/* Project description */}
-                                <motion.p
-                                    className="text-gray-300 text-sm mb-4"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.3 }}
-                                >
-                                    {project.description}
-                                </motion.p>
-
-                                {/* Technologies */}
-                                <motion.div
-                                    className="mb-6"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.4 }}
-                                >
-                                    <h4 className="text-gray-400 text-xs mb-2 uppercase tracking-wider">
-                                        Teknologi
-                                    </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {project.technologies.map(
-                                            (tech, idx) => (
-                                                <motion.div
-                                                    key={tech}
-                                                    initial={{
-                                                        opacity: 0,
-                                                        y: 10,
-                                                    }}
-                                                    animate={{
-                                                        opacity: 1,
-                                                        y: 0,
-                                                    }}
-                                                    transition={{
-                                                        delay: 0.4 + idx * 0.05,
-                                                    }}
-                                                >
-                                                    <TechBadge name={tech} />
-                                                </motion.div>
-                                            )
-                                        )}
-                                    </div>
-                                </motion.div>
-
-                                {/* Action buttons */}
-                                <motion.div
-                                    className="flex justify-center gap-4"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.5 }}
-                                >
-                                    {project.githubUrl && (
-                                        <motion.a
-                                            href={project.githubUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-300"
-                                            whileHover={{
-                                                y: -2,
-                                                boxShadow:
-                                                    "0 5px 10px rgba(0,0,0,0.2)",
-                                            }}
-                                            initial={{ scale: 0.9 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{
-                                                delay: 0.6,
-                                                type: "spring",
-                                            }}
-                                        >
-                                            <FaGithub />
-                                            <span>GitHub</span>
-                                        </motion.a>
-                                    )}
-
-                                    {project.demoUrl && (
-                                        <motion.a
-                                            href={project.demoUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
-                                            whileHover={{
-                                                y: -2,
-                                                boxShadow:
-                                                    "0 5px 15px rgba(6, 182, 212, 0.3)",
-                                            }}
-                                            initial={{ scale: 0.9 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{
-                                                delay: 0.7,
-                                                type: "spring",
-                                            }}
-                                        >
-                                            <FaExternalLinkAlt />
-                                            <span>Demo</span>
-                                        </motion.a>
-                                    )}
-
-                                    <motion.div
-                                        initial={{ scale: 0.9 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{
-                                            delay: 0.8,
-                                            type: "spring",
-                                        }}
-                                    >
-                                        <Link
-                                            href={`/projects/${project.id}`}
-                                            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                            }}
-                                        >
-                                            <FaInfoCircle />
-                                            <span>Detail</span>
-                                        </Link>
-                                    </motion.div>
-                                </motion.div>
-                            </div>
-
-                            {/* Decorative animated corner elements */}
-                            <motion.div
-                                className="absolute top-0 left-0 w-3 h-3 border-t border-l border-cyan-500"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.8 }}
-                            />
-                            <motion.div
-                                className="absolute top-0 right-0 w-3 h-3 border-t border-r border-purple-500"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.9 }}
-                            />
-                            <motion.div
-                                className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-purple-500"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1 }}
-                            />
-                            <motion.div
-                                className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-cyan-500"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1.1 }}
-                            />
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </motion.div>
     );
 }
