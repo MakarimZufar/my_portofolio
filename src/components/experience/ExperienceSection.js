@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 // Import components and utilities
 import ExperienceCard from "./ExperienceCard";
 import VerticalTimeline from "./VerticalTimeline";
-import ParticlesBackground from "../../styles/ParticlesBackground";
 import ExperienceStyles from "./ExperienceStyles";
 import experienceData from "../../data/experienceData";
 import { processTimelineData } from "./utils";
@@ -180,9 +179,6 @@ const ExperienceSection = () => {
 
                     {/* Experience cards */}
                     {renderExperienceCards()}
-
-                    {/* Decorative particles */}
-                    <ParticlesBackground count={30} />
 
                     {/* Subtle glow spots */}
                     <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-blue-500/5 blur-3xl"></div>

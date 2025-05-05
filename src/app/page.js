@@ -5,9 +5,9 @@ import TechLayeredCarousel from "@/components/TechStack/TechStackCarousel";
 import FeaturedProjects from "@/components/FeaturedProjects/FeaturedProjects";
 import IntroCard from "@/components/IntroCard/IntroCard";
 import ExperienceSection from "@/components/experience/ExperienceSection";
-import InteractiveBackground from "@/styles/InteractiveBackground";
 import ScrollIndicator from "@/components/ScrollIndicator";
 import { FaArrowDown } from "react-icons/fa";
+import MeteorBackground from "@/components/MeteorBackground";
 
 export default function HomePage() {
     useEffect(() => {
@@ -31,7 +31,7 @@ export default function HomePage() {
             document.documentElement.style.overflowY = "auto";
             document.body.style.overflowY = "auto";
         };
-        
+
         adjustSectionHeight();
         fixScrollingBehavior();
         window.addEventListener("resize", adjustSectionHeight);
@@ -40,15 +40,16 @@ export default function HomePage() {
 
     return (
         <main className="text-white overflow-x-hidden overflow-y-hidden bg-gradient-to-b from-[#050515] via-[#0a0a1a] to-[#05051F] min-h-screen relative">
-            {/* Interactive particle background */}
-            <InteractiveBackground />
+            {/* Efek meteor sebagai latar belakang utama */}
+            <MeteorBackground />
+            {/* Interactive particle background sebagai overlay */}
 
             {/* Hero Section with IntroCard */}
             <section
                 id="hero"
-                className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-20"
+                className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-20 z-10"
             >
-                <div className="absolute inset-0 -z-20 bg-gradient-to-tr from-[#0f0c29]/60 via-[#302b63]/40 to-[#24243e]/60" />
+                <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-[#0f0c29]/60 via-[#302b63]/40 to-[#24243e]/60" />
 
                 {/* Intro Card Component */}
                 <IntroCard />
@@ -75,7 +76,7 @@ export default function HomePage() {
             {/* Tech Stack Section */}
             <section
                 id="skills"
-                className="pt-24 pb-32 px-6 sm:px-20 flex flex-col items-center gap-24"
+                className="pt-24 pb-32 px-6 sm:px-20 flex flex-col items-center gap-24 relative z-10"
             >
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -98,12 +99,12 @@ export default function HomePage() {
             </section>
 
             {/* Experience Component */}
-            <section id="experience">
+            <section id="experience" className="relative z-10">
                 <ExperienceSection />
             </section>
 
             {/* Featured Projects Component */}
-            <section id="projects">
+            <section id="projects" className="relative z-10">
                 <FeaturedProjects />
             </section>
 

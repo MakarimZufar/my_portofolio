@@ -1,10 +1,9 @@
-// src/data/projectsData.js
 const projects = [
     {
-        id: "weather-app",
-        title: "Aplikasi Cuaca Realtime",
+        id: "lorem-ipsum1",
+        title: "lorem ipsum dolor sit amet",
         description:
-            "Aplikasi cuaca yang menampilkan data realtime dari berbagai kota di dunia dengan fitur perkiraan 5 hari ke depan dan visualisasi data.",
+            "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         imageUrl: "/projects/weather-app.jpg",
         tags: ["Web", "Frontend"],
         technologies: [
@@ -18,19 +17,20 @@ const projects = [
         demoUrl: "https://weather-app-makarim.vercel.app",
     },
     {
-        id: "portfolio-v2",
-        title: "Portfolio Website v2",
+        id: "my_portfolio",
+        title: "My Portfolio Website",
         description:
             "Website portofolio pribadi yang dibangun dengan Next.js dan Tailwind CSS, menampilkan proyek-proyek dan kemampuan teknis secara interaktif.",
         imageUrl: "/projects/portfolio.jpg",
         tags: ["Web", "Frontend", "UI"],
         technologies: ["Next.js", "Tailwind CSS", "Framer Motion", "React"],
         featured: true,
-        githubUrl: "https://github.com/MakarimZufar/portfolio-v2",
+        githubUrl:
+            "https://github.com/MakarimZufar/my_portofolio",
         demoUrl: "https://makarimzufar.vercel.app",
     },
     {
-        id: "blog-platform",
+        id: "",
         title: "Platform Blog",
         description:
             "Platform blog dengan fitur autentikasi, editor teks kaya, komentar, dan analitik. Mendukung markdown dan penyimpanan gambar.",
