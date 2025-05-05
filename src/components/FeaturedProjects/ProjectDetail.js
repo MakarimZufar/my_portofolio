@@ -55,9 +55,9 @@ const ProjectDetail = ({ project, onClose }) => {
 
                 {/* Project image */}
                 <div className="relative w-full h-64 md:h-80 overflow-hidden">
-                    {project.image ? (
+                    {project.imageUrl ? (
                         <Image
-                            src={project.image}
+                            src={project.imageUrl}
                             alt={project.title}
                             fill
                             className="object-cover"

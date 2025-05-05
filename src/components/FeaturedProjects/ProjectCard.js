@@ -37,9 +37,7 @@ export default function ProjectCard({ project, index, onClick }) {
 
     return (
         <motion.div
-            className={`group relative w-64 h-60 md:w-full bg-gradient-to-br ${getGradientByIndex(
-                index
-            )} rounded-lg overflow-hidden cursor-pointer`}
+            className="group relative w-64 h-60 md:w-full rounded-lg overflow-hidden cursor-pointer"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -51,6 +49,26 @@ export default function ProjectCard({ project, index, onClick }) {
             }}
             onClick={handleClick}
         >
+            {/* Project Image Background */}
+            <div className="absolute inset-0 w-full h-full">
+                {project.imageUrl ? (
+                    <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        layout="fill"
+                        objectFit="cover"
+                        className="opacity-40 group-hover:opacity-30 transition-opacity duration-300"
+                    />
+                ) : (
+                    <div
+                        className={`w-full h-full bg-gradient-to-br ${getGradientByIndex(
+                            index
+                        )}`}
+                    />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+            </div>
+
             {/* Shimmer Effect */}
             <motion.div
                 className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 -skew-x-12 translate-x-full"
@@ -68,7 +86,7 @@ export default function ProjectCard({ project, index, onClick }) {
             {/* Gradient Border Effect */}
             <div className="absolute inset-0 rounded-lg p-[1px] bg-gradient-to-br from-cyan-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             {/* Card Content */}
-            <div className="relative h-full p-4 bg-gray-900/70 backdrop-blur-md rounded-lg border border-gray-800/70 flex flex-col justify-between z-10">
+            <div className="relative h-full p-4 bg-gray-900/40 backdrop-blur-md rounded-lg border border-gray-800/70 flex flex-col justify-between z-10">
                 {/* Project Title and Emoji */}
                 <div className="mb-1">
                     <div className="flex justify-between items-start">
