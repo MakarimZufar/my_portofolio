@@ -44,7 +44,7 @@ export default function ProjectCard({ project, index, onClick }) {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             whileHover={{
                 y: -5,
-                boxShadow: "0 10px 25px -5px rgba(6, 182, 212, 0.5)",
+                boxShadow: "0 20px 30px -10px rgba(6, 182, 212, 0.3)",
                 transition: { duration: 0.3 },
             }}
             onClick={handleClick}
@@ -69,9 +69,12 @@ export default function ProjectCard({ project, index, onClick }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
             </div>
 
+            {/* Enhanced Gradient Border Effect */}
+            <div className="absolute inset-0 rounded-lg border-2 border-transparent bg-gradient-to-br from-cyan-500/0 via-purple-500/0 to-blue-500/0 group-hover:from-cyan-500/80 group-hover:via-purple-500/80 group-hover:to-blue-500/80 transition-all duration-500 ease-out opacity-0 group-hover:opacity-100"></div>
+
             {/* Shimmer Effect */}
             <motion.div
-                className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 -skew-x-12 translate-x-full"
+                className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 -skew-x-12 translate-x-full"
                 animate={{
                     x: ["-100%", "100%"],
                 }}
@@ -83,8 +86,7 @@ export default function ProjectCard({ project, index, onClick }) {
                     repeatDelay: 0.5,
                 }}
             />
-            {/* Gradient Border Effect */}
-            <div className="absolute inset-0 rounded-lg p-[1px] bg-gradient-to-br from-cyan-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
             {/* Card Content */}
             <div className="relative h-full p-4 bg-gray-900/40 backdrop-blur-md rounded-lg border border-gray-800/70 flex flex-col justify-between z-10">
                 {/* Project Title and Emoji */}
@@ -114,24 +116,28 @@ export default function ProjectCard({ project, index, onClick }) {
                     )}
                 </div>
 
-                {/* Hover Reveal Info */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
+                {/* Hover Reveal Info - Enhanced */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4 z-20">
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1 }}
-                        className="flex flex-col items-center gap-1"
+                        className="flex flex-col items-center gap-2"
                     >
-                        <span className="text-xs text-gray-300 bg-gray-800/80 px-3 py-1 rounded-full backdrop-blur-sm border border-gray-700/30">
+                        <span className="text-xs text-white bg-gradient-to-r from-cyan-500/80 to-purple-600/80 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/20 shadow-lg transform transition-all duration-300">
                             Klik untuk detail
                         </span>
-                        <motion.span
-                            animate={{ y: [0, -3, 0] }}
-                            transition={{ repeat: Infinity, duration: 1.5 }}
-                            className="text-cyan-400"
+                        <motion.div
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{
+                                repeat: Infinity,
+                                duration: 1.5,
+                                ease: "easeInOut",
+                            }}
+                            className="text-cyan-400 bg-gray-900/70 rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-cyan-500/30"
                         >
-                            <FaChevronDown />
-                        </motion.span>
+                            <FaChevronDown size={16} />
+                        </motion.div>
                     </motion.div>
                 </div>
 

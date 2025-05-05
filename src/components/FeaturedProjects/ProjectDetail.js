@@ -76,7 +76,7 @@ const ProjectDetail = ({ project, onClose }) => {
                         <div className="flex flex-wrap gap-2 mb-4">
                             {project.tags &&
                                 project.tags.map((tag) => (
-                                    <ProjectTag key={tag} tag={tag} />
+                                    <ProjectTag key={tag} name={tag} />
                                 ))}
                         </div>
                     </div>
@@ -116,16 +116,16 @@ const ProjectDetail = ({ project, onClose }) => {
                         <div className="flex flex-wrap gap-2">
                             {project.technologies &&
                                 project.technologies.map((tech) => (
-                                    <TechBadge key={tech} tech={tech} />
+                                    <TechBadge key={tech} name={tech} />
                                 ))}
                         </div>
                     </div>
 
                     {/* Links */}
                     <div className="flex flex-wrap gap-4 pt-2">
-                        {project.github && (
+                        {project.githubUrl && (
                             <a
-                                href={project.github}
+                                href={project.githubUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded-md transition-colors"
