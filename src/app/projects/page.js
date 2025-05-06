@@ -8,9 +8,8 @@ import {
     FaRegLightbulb,
     FaCode,
 } from "react-icons/fa";
-// Import komponen dari common folder alih-alih dari folder Projects
-import ProjectCard from "@/components/common/ProjectCard";
-import ProjectDetail from "@/components/common/ProjectDetail";
+// Import komponen dari project folder
+import { ProjectCard, ProjectDetail } from "@/components/project";
 import TechBadge from "@/components/TechBadge";
 import ProjectTag from "@/components/ProjectTag";
 import {

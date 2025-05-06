@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import TechLayeredCarousel from "@/components/TechStack/TechStackCarousel";
-import FeaturedProjects from "@/components/FeaturedProjects/FeaturedProjects";
+import { FeaturedProjects } from "@/components/FeaturedProjects"; // Perbarui import dari index.js
 import IntroCard from "@/components/IntroCard/IntroCard";
 import ExperienceSection from "@/components/experience/ExperienceSection";
 import ScrollIndicator from "@/components/ScrollIndicator";
