@@ -5,8 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
 import { getFeaturedProjects } from "@/data/projectsData"; // Import fungsi untuk mendapatkan proyek unggulan
-import ProjectCard from "@/components/common/ProjectCard";
-import ProjectDetail from "@/components/common/ProjectDetail";
+import { ProjectCard, ProjectDetail } from "@/components/project"; // Import from project folder instead of common
 
 // Menggunakan data dari projectsData.js
 const featuredProjects = getFeaturedProjects();
