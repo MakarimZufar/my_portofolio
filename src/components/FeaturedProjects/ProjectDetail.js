@@ -1,90 +1,114 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import {
     FaGithub,
     FaExternalLinkAlt,
     FaTimes,
     FaRegLightbulb,
 } from "react-icons/fa";
-import ProjectTag from "@/components/ProjectTag";
 import TechBadge from "@/components/TechBadge";
 
 const ProjectDetail = ({ project, onClose }) => {
-    // Close modal when clicking outside
-    const handleBackdropClick = (e) => {
-        // Only close if clicking directly on the backdrop, not on the content
-        if (e.target === e.currentTarget) {
-            onClose();
-        }
-    };
+    const modalRef = useRef(null);
 
-    // Handle escape key press
-    const handleKeyDown = (e) => {
-        if (e.key === "Escape") {
-            onClose();
-        }
-    };
+    // Handle ESC key to close modal
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                onClose();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [onClose]);
+
+    // Handle click outside to close modal
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (modalRef.current && !modalRef.current.contains(e.target)) {
+                onClose();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [onClose]);
+
+    if (!project) return null;
 
     return (
         <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-6 overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={handleBackdropClick}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
         >
             <motion.div
-                className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-900 rounded-lg shadow-xl"
-                initial={{ scale: 0.9, y: 50 }}
+                ref={modalRef}
+                className="bg-gray-900 border border-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-blue-900/20"
+                initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 50 }}
-                transition={{ duration: 0.3 }}
+                exit={{ scale: 0.9, y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
             >
                 {/* Close button */}
                 <button
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
                     onClick={onClose}
-                    aria-label="Close dialog"
+                    className="absolute right-4 top-4 text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-700/70 rounded-full p-2 transition-colors z-10"
                 >
-                    <FaTimes size={24} />
+                    <FaTimes size={18} />
                 </button>
 
                 {/* Project image */}
-                <div className="relative w-full h-64 md:h-80 overflow-hidden">
-                    {project.imageUrl ? (
-                        <Image
-                            src={project.imageUrl}
-                            alt={project.title}
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                            <span className="text-6xl">📊</span>
+                <div className="relative w-full h-64 md:h-80">
+                    <div
+                        className="w-full h-full bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url(${project.imageUrl})`,
+                        }}
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-transparent" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 w-full p-6">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-3xl font-bold text-white">
+                                {project.title}{" "}
+                                <span
+                                    className="ml-2"
+                                    role="img"
+                                    aria-label="Project emoji"
+                                >
+                                    {project.emoji}
+                                </span>
+                            </h2>
                         </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
-                    <div className="absolute bottom-0 left-0 p-6">
-                        <h2 className="text-3xl font-bold text-white mb-2">
-                            {project.title}
-                        </h2>
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {project.tags &&
-                                project.tags.map((tag) => (
-                                    <ProjectTag key={tag} name={tag} />
-                                ))}
+
+                        <div className="flex flex-wrap gap-2 mt-4">
+                            {project.tags.map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="px-3 py-1 text-sm bg-gray-800/80 text-gray-300 rounded-full border border-gray-700/50"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
                         </div>
                     </div>
                 </div>
 
                 {/* Project details */}
-                <div className="p-6">
-                    <div className="mb-6">
+                <div className="p-6 space-y-6">
+                    {/* Description */}
+                    <div>
                         <h3 className="text-xl font-semibold text-gray-100 mb-3">
                             Description
                         </h3>
@@ -141,7 +165,7 @@ const ProjectDetail = ({ project, onClose }) => {
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors"
                             >
-                                <FaExternalLinkAlt size={18} />
+                                <FaExternalLinkAlt size={16} />
                                 <span>Live Demo</span>
                             </a>
                         )}

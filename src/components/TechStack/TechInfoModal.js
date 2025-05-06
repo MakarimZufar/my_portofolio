@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { getExperienceDescription } from "@/data/techStackData";
+import { getExperienceDescription } from "@/data/technologiesData";
 
 const TechInfoModal = ({ tech, onClose }) => {
     if (!tech) return null;
@@ -51,16 +51,16 @@ const TechInfoModal = ({ tech, onClose }) => {
                     <p className="text-gray-300">
                         {getExperienceDescription(tech.name)}
                     </p>
-                    <div className="flex space-x-3">
-                        <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-300">
-                            Web
-                        </span>
-                        <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-300">
-                            Development
-                        </span>
-                        <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-300">
-                            Frontend
-                        </span>
+                    <div className="flex flex-wrap gap-2">
+                        {tech.category &&
+                            tech.category.map((cat) => (
+                                <span
+                                    key={cat}
+                                    className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-300"
+                                >
+                                    {cat}
+                                </span>
+                            ))}
                     </div>
                 </div>
             </motion.div>

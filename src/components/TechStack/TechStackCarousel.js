@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TechRow from "./TechRow";
 import TechInfoModal from "./TechInfoModal";
-import { techRows } from "@/data/techStackData";
+import { techRows } from "@/data/technologiesData";
 import styles from "./TechStack.module.css";
 
 const TechStackCarousel = () => {

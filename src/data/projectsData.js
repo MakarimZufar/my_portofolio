@@ -1,4 +1,6 @@
-// src/data/projects.js
+// src/data/projectsData.js
+import { technologies, getTechnology } from "./technologiesData";
+
 const projects = [
     {
         id: "weather-app",
@@ -102,10 +104,20 @@ export const getAllTags = () => {
     return [...new Set(allTags)];
 };
 
-// Fungsi untuk mendapatkan semua teknologi unik
+// Fungsi untuk mendapatkan semua teknologi unik dari proyek-proyek
 export const getAllTechnologies = () => {
     const allTechnologies = projects.flatMap((project) => project.technologies);
     return [...new Set(allTechnologies)];
+};
+
+// Fungsi untuk memeriksa apakah teknologi ada dalam file technologiesData
+export const validateTechnology = (techName) => {
+    return Boolean(getTechnology(techName));
+};
+
+// Fungsi untuk mendapatkan detail teknologi untuk sebuah proyek
+export const getProjectTechnologies = (project) => {
+    return project.technologies.map((techName) => getTechnology(techName));
 };
 
 // Pemetaan emoji default berdasarkan tag

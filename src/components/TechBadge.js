@@ -1,6 +1,7 @@
 // components/TechBadge.js
 "use client";
 import { motion } from "framer-motion";
+import { getBadgeColor, getTechIcon } from "@/data/technologiesData";
 
 export default function TechBadge({
     name,
@@ -10,54 +11,6 @@ export default function TechBadge({
     selectable = false,
     showIcon = true,
 }) {
-    // Warna untuk badge berdasarkan teknologi
-    const getBadgeColor = (techName) => {
-        const colors = {
-            React: "from-blue-500 to-cyan-500",
-            "Next.js": "from-black to-gray-700",
-            "Tailwind CSS": "from-cyan-500 to-blue-400",
-            JavaScript: "from-yellow-400 to-yellow-500",
-            "Node.js": "from-green-500 to-green-600",
-            MongoDB: "from-green-600 to-green-700",
-            Firebase: "from-yellow-500 to-orange-500",
-            Redux: "from-purple-600 to-indigo-600",
-            "Material UI": "from-blue-400 to-indigo-500",
-            Express: "from-gray-600 to-gray-700",
-            HTML: "from-orange-500 to-red-500",
-            CSS: "from-blue-400 to-blue-500",
-            "Framer Motion": "from-purple-500 to-pink-500",
-            TypeScript: "from-blue-600 to-blue-700",
-            "NextAuth.js": "from-indigo-500 to-purple-500",
-            "OpenWeather API": "from-cyan-600 to-blue-600",
-        };
-
-        return colors[techName] || "from-gray-500 to-gray-600";
-    };
-
-    // Icon untuk badge
-    const getTechIcon = (techName) => {
-        const icons = {
-            React: "⚛️",
-            "Next.js": "▲",
-            "Tailwind CSS": "🌊",
-            JavaScript: "JS",
-            TypeScript: "TS",
-            "Node.js": "🟢",
-            MongoDB: "🍃",
-            Firebase: "🔥",
-            Redux: "↺",
-            "Material UI": "UI",
-            Express: "🚂",
-            HTML: "🌐",
-            CSS: "🎨",
-            "Framer Motion": "🔄",
-            "NextAuth.js": "🔒",
-            "OpenWeather API": "☁️",
-        };
-
-        return icons[techName] || "";
-    };
-
     const badgeClasses = `
         ${small ? "text-[0.6rem] px-2 py-0.5" : "text-xs px-2.5 py-1"} 
         ${
