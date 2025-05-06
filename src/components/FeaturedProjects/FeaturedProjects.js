@@ -1,91 +1,18 @@
-// src/components/FeaturedProjects.js
+// src/components/FeaturedProjects/FeaturedProjects.js
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
 import { getFeaturedProjects } from "@/data/projectsData"; // Import fungsi untuk mendapatkan proyek unggulan
-import TechBadge from "@/components/TechBadge";
-import ProjectTag from "@/components/ProjectTag";
+import ProjectCard from "@/components/common/ProjectCard";
+import ProjectDetail from "@/components/common/ProjectDetail";
 
 // Menggunakan data dari projectsData.js
 const featuredProjects = getFeaturedProjects();
 
-// Project Card
-const ProjectCard = ({ project, index }) => {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="group relative rounded-xl overflow-hidden bg-gradient-to-br from-gray-900 to-black p-1 h-full"
-            whileHover={{ y: -8, transition: { duration: 0.3 } }}
-        >
-            {/* Gradient Border */}
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-            {/* Inner Content */}
-            <div className="relative bg-gray-900 rounded-xl p-5 flex flex-col h-full z-10">
-                {/* Project Title */}
-                <h3 className="text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                    {project.title}
-                </h3>
-
-                {/* Tags */}
-                <div className="flex gap-2 mb-3 flex-wrap">
-                    {project.tags.map((tag) => (
-                        <ProjectTag key={tag} name={tag} />
-                    ))}
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-400 text-sm mb-4 flex-grow">
-                    {project.description}
-                </p>
-
-                {/* Technologies */}
-                <div className="mb-4">
-                    <div className="text-xs text-gray-500 mb-2">Teknologi:</div>
-                    <div className="flex flex-wrap gap-2">
-                        {project.technologies.slice(0, 3).map((tech) => (
-                            <TechBadge key={tech} name={tech} />
-                        ))}
-                        {project.technologies.length > 3 && (
-                            <span className="text-xs px-2 py-1 bg-gray-800 text-gray-400 rounded-full">
-                                +{project.technologies.length - 3}
-                            </span>
-                        )}
-                    </div>
-                </div>
-
-                {/* Links - becomes visible on hover */}
-                <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">
-                    <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                    >
-                        GitHub
-                    </a>
-                    <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full hover:from-cyan-600 hover:to-blue-600 transition-colors"
-                    >
-                        Lihat Demo
-                    </a>
-                </div>
-
-                {/* Shimmer effect on hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 opacity-0 group-hover:opacity-100" />
-            </div>
-        </motion.div>
-    );
-};
-
 export default function FeaturedProjects() {
+    const [selectedProject, setSelectedProject] = useState(null);
     const scrollContainerRef = useRef(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
@@ -118,6 +45,20 @@ export default function FeaturedProjects() {
             // Update status setelah scroll
             setTimeout(checkScrollability, 300);
         }
+    };
+
+    // Handle project click to show details
+    const handleProjectClick = (project) => {
+        setSelectedProject(project);
+        // Add a class to body to prevent scrolling when modal is open
+        document.body.classList.add("overflow-hidden");
+    };
+
+    // Close project details modal
+    const closeProjectDetail = () => {
+        setSelectedProject(null);
+        // Remove the class to re-enable scrolling
+        document.body.classList.remove("overflow-hidden");
     };
 
     return (
@@ -184,7 +125,12 @@ export default function FeaturedProjects() {
                                 key={project.id}
                                 className="w-80 flex-shrink-0 lg:w-auto"
                             >
-                                <ProjectCard project={project} index={index} />
+                                <ProjectCard 
+                                    project={project} 
+                                    index={index} 
+                                    onClick={handleProjectClick} 
+                                    featured={true} 
+                                />
                             </div>
                         ))}
                     </div>
@@ -201,6 +147,15 @@ export default function FeaturedProjects() {
                     </Link>
                 </div>
             </div>
+
+            {/* Project Detail Modal */}
+            {selectedProject && (
+                <ProjectDetail 
+                    project={selectedProject} 
+                    onClose={closeProjectDetail} 
+                    featured={true} 
+                />
+            )}
 
             {/* Styling untuk hide scrollbar tetapi tetap bisa scroll */}
             <style jsx>{`
