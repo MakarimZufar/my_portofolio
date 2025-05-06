@@ -14,16 +14,21 @@ import ProjectTag from "@/components/ProjectTag";
 
 /**
  * ProjectCard Component - Unified version that works for both featured and regular projects
- * 
+ *
  * @param {Object} project - Project data object
  * @param {Number} index - Index for animation sequencing
  * @param {Function} onClick - Click handler for project details
  * @param {Boolean} featured - Whether this is a featured project display (different styling)
  * @returns {JSX.Element}
  */
-export default function ProjectCard({ project, index, onClick, featured = false }) {
+export default function ProjectCard({
+    project,
+    index,
+    onClick,
+    featured = false,
+}) {
     const [isHovered, setIsHovered] = useState(false);
-    
+
     const {
         title,
         description,
@@ -36,7 +41,7 @@ export default function ProjectCard({ project, index, onClick, featured = false 
     } = project;
 
     // Conditional styling based on whether this is a featured project or in the projects grid
-    const cardStyle = featured 
+    const cardStyle = featured
         ? "group bg-gradient-to-b from-gray-900 to-gray-950 rounded-xl overflow-hidden shadow-xl shadow-blue-900/10 relative"
         : "group relative overflow-hidden rounded-2xl border border-blue-500/10 bg-gradient-to-br from-gray-900/90 to-gray-950/90 p-0.5 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10";
 
@@ -46,10 +51,15 @@ export default function ProjectCard({ project, index, onClick, featured = false 
             initial={{ opacity: 0, y: featured ? 50 : 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: index * 0.1 }}
-            whileHover={featured ? { y: -5 } : {
-                y: -5,
-                boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.15)",
-            }}
+            whileHover={
+                featured
+                    ? { y: -5 }
+                    : {
+                          y: -5,
+                          boxShadow:
+                              "0 25px 50px -12px rgba(59, 130, 246, 0.15)",
+                      }
+            }
             onClick={() => onClick && onClick(project)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -58,39 +68,52 @@ export default function ProjectCard({ project, index, onClick, featured = false 
             {!featured && (
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-violet-600/20 to-cyan-600/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 blur-xl"></div>
             )}
-            
+
             {/* Card Content Container */}
-            <div className={featured 
-                ? "cursor-pointer" 
-                : "relative h-full rounded-2xl bg-gradient-to-br from-black/80 to-gray-900/90 p-5 backdrop-blur-md z-10 overflow-hidden"
-            }>
+            <div
+                className={
+                    featured
+                        ? "cursor-pointer"
+                        : "relative h-full rounded-2xl bg-gradient-to-br from-black/80 to-gray-900/90 p-5 backdrop-blur-md z-10 overflow-hidden"
+                }
+            >
                 {/* Image Container */}
-                <div className={featured 
-                    ? "relative w-full h-48 sm:h-56" 
-                    : "overflow-hidden mb-4 relative aspect-video rounded-xl group-hover:shadow-lg transition-all duration-300"
-                }>
-                    <div className={featured 
-                        ? "absolute inset-0 overflow-hidden" 
-                        : "relative w-full h-full"
-                    }>
+                <div
+                    className={
+                        featured
+                            ? "relative w-full h-48 sm:h-56"
+                            : "overflow-hidden mb-4 relative aspect-video rounded-xl group-hover:shadow-lg transition-all duration-300"
+                    }
+                >
+                    <div
+                        className={
+                            featured
+                                ? "absolute inset-0 overflow-hidden"
+                                : "relative w-full h-full"
+                        }
+                    >
                         <Image
                             src={imageUrl || "/projects/default-project.jpg"}
                             alt={title}
-                            className={featured 
-                                ? "object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-500" 
-                                : "w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                            className={
+                                featured
+                                    ? "object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-500"
+                                    : "w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                             }
                             width={500}
                             height={300}
                         />
-                        
+
                         {/* Gradient overlay for image */}
-                        <div className={featured 
-                            ? "absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/30 group-hover:from-black group-hover:via-black/70 group-hover:to-black/20 transition-opacity duration-500" 
-                            : "absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"
-                        } />
+                        <div
+                            className={
+                                featured
+                                    ? "absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/30 group-hover:from-black group-hover:via-black/70 group-hover:to-black/20 transition-opacity duration-500"
+                                    : "absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"
+                            }
+                        />
                     </div>
-                    
+
                     {/* Project Tags */}
                     <div className="absolute bottom-3 left-3 z-20 flex flex-wrap gap-1.5">
                         {tags.slice(0, 2).map((tag) => (
@@ -114,7 +137,7 @@ export default function ProjectCard({ project, index, onClick, featured = false 
                             {emoji}
                         </motion.div>
                     </div>
-                    
+
                     {/* Featured Badge */}
                     {project.featured && (
                         <div className="absolute top-3 right-3 z-20">
@@ -137,7 +160,9 @@ export default function ProjectCard({ project, index, onClick, featured = false 
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 -skew-x-12"
                         initial={{ x: "-100%" }}
                         animate={
-                            isHovered ? { x: ["100%", "-100%"] } : { x: "-100%" }
+                            isHovered
+                                ? { x: ["100%", "-100%"] }
+                                : { x: "-100%" }
                         }
                         transition={{
                             repeat: Infinity,
@@ -149,7 +174,13 @@ export default function ProjectCard({ project, index, onClick, featured = false 
                 )}
 
                 {/* Card Content */}
-                <div className={featured ? "relative h-full p-5 flex flex-col justify-between z-10" : "relative z-10"}>
+                <div
+                    className={
+                        featured
+                            ? "relative h-full p-5 flex flex-col justify-between z-10"
+                            : "relative z-10"
+                    }
+                >
                     {/* Project Title */}
                     {featured ? (
                         <div className="flex items-start justify-between mb-2">
@@ -171,10 +202,13 @@ export default function ProjectCard({ project, index, onClick, featured = false 
                     )}
 
                     {/* Description */}
-                    <p className={featured 
-                        ? "text-gray-400 text-sm line-clamp-2 mt-1 group-hover:text-gray-300 transition-colors"
-                        : "text-gray-400 text-sm mb-4 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300"
-                    }>
+                    <p
+                        className={
+                            featured
+                                ? "text-gray-400 text-sm line-clamp-2 mt-1 group-hover:text-gray-300 transition-colors"
+                                : "text-gray-400 text-sm mb-4 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300"
+                        }
+                    >
                         {description}
                     </p>
 

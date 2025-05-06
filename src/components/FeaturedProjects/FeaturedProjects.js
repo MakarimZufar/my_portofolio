@@ -125,11 +125,11 @@ export default function FeaturedProjects() {
                                 key={project.id}
                                 className="w-80 flex-shrink-0 lg:w-auto"
                             >
-                                <ProjectCard 
-                                    project={project} 
-                                    index={index} 
-                                    onClick={handleProjectClick} 
-                                    featured={true} 
+                                <ProjectCard
+                                    project={project}
+                                    index={index}
+                                    onClick={handleProjectClick}
+                                    featured={true}
                                 />
                             </div>
                         ))}
@@ -150,10 +150,10 @@ export default function FeaturedProjects() {
 
             {/* Project Detail Modal */}
             {selectedProject && (
-                <ProjectDetail 
-                    project={selectedProject} 
-                    onClose={closeProjectDetail} 
-                    featured={true} 
+                <ProjectDetail
+                    project={selectedProject}
+                    onClose={closeProjectDetail}
+                    featured={true}
                 />
             )}
 

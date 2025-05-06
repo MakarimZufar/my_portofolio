@@ -2,18 +2,18 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { 
-    FaGithub, 
-    FaExternalLinkAlt, 
-    FaRegLightbulb, 
-    FaTimes 
+import {
+    FaGithub,
+    FaExternalLinkAlt,
+    FaRegLightbulb,
+    FaTimes,
 } from "react-icons/fa";
 import TechBadge from "@/components/TechBadge";
 import ProjectTag from "@/components/ProjectTag";
 
 /**
  * ProjectDetail Component - Unified version that works for both featured and regular projects
- * 
+ *
  * @param {Object} project - Project data object
  * @param {Function} onClose - Handler for closing the detail view
  * @param {Boolean} featured - Whether this is a featured project view (different styling)
@@ -141,9 +141,9 @@ export default function ProjectDetail({ project, onClose, featured = false }) {
                         </h3>
                         <div className="flex flex-wrap gap-2">
                             {technologies.map((tech) => (
-                                <TechBadge 
-                                    key={tech} 
-                                    name={tech} 
+                                <TechBadge
+                                    key={tech}
+                                    name={tech}
                                     isSelected={true}
                                 />
                             ))}
