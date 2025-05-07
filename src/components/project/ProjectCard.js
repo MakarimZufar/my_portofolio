@@ -28,13 +28,17 @@ const renderMedia = (mediaUrl) => {
     if (mediaUrl.includes("youtube.com") || mediaUrl.includes("youtu.be")) {
         const videoId = mediaUrl.split("v=")[1]?.split("&")[0] || mediaUrl.split("youtu.be/")[1];
         return (
-            <iframe
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}`}
-                frameBorder="0"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                className="w-full h-full rounded-lg"
-            ></iframe>
+            <div className="relative w-full h-full">
+                {/* Custom overlay to prevent YouTube title from showing */}
+                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
+                <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&modestbranding=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&origin=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : '')}&enablejsapi=1&version=3&playerapiid=ytplayer`}
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    className="w-full h-full rounded-lg"
+                ></iframe>
+            </div>
         );
     }
     return (
