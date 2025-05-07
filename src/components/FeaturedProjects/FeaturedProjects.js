@@ -3,7 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
+import {
+    FaChevronLeft,
+    FaChevronRight,
+    FaArrowRight,
+    FaPause,
+    FaPlay,
+} from "react-icons/fa";
 import { getFeaturedProjects } from "@/data/projectsData"; // Import fungsi untuk mendapatkan proyek unggulan
 import { ProjectCard, ProjectDetail } from "@/components/project"; // Import from project folder instead of common
 
@@ -15,6 +21,10 @@ export default function FeaturedProjects() {
     const scrollContainerRef = useRef(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAutoSliding, setIsAutoSliding] = useState(true);
+    const [isPaused, setIsPaused] = useState(false);
+    const autoSlideIntervalRef = useRef(null);
 
     // Mengecek apakah dapat scroll kiri/kanan
     const checkScrollability = () => {
@@ -38,17 +48,99 @@ export default function FeaturedProjects() {
     const handleScroll = (direction) => {
         const el = scrollContainerRef.current;
         if (el) {
+            // Pause auto-sliding when manually scrolling
+            setIsPaused(true);
+
             const scrollAmount = direction === "left" ? -300 : 300;
             el.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
+            // Calculate the new current index
+            if (
+                direction === "right" &&
+                currentIndex < featuredProjects.length - 1
+            ) {
+                setCurrentIndex((prevIndex) => prevIndex + 1);
+            } else if (direction === "left" && currentIndex > 0) {
+                setCurrentIndex((prevIndex) => prevIndex - 1);
+            }
 
             // Update status setelah scroll
             setTimeout(checkScrollability, 300);
         }
     };
 
+    // Auto-slide functionality
+    useEffect(() => {
+        const startAutoSlide = () => {
+            if (isAutoSliding && !isPaused) {
+                autoSlideIntervalRef.current = setInterval(() => {
+                    const el = scrollContainerRef.current;
+                    if (el) {
+                        // If we can scroll right, scroll right, otherwise go back to start
+                        if (canScrollRight) {
+                            // Calculate width of one card + gap
+                            const cardWidth =
+                                el.scrollWidth / featuredProjects.length;
+                            // Scroll to the next card
+                            el.scrollBy({
+                                left: cardWidth,
+                                behavior: "smooth",
+                            });
+                            setCurrentIndex((prevIndex) =>
+                                prevIndex < featuredProjects.length - 1
+                                    ? prevIndex + 1
+                                    : 0
+                            );
+                        } else {
+                            // Reset to the beginning when we reach the end
+                            el.scrollTo({ left: 0, behavior: "smooth" });
+                            setCurrentIndex(0);
+                        }
+
+                        // Update scroll indicators
+                        setTimeout(checkScrollability, 300);
+                    }
+                }, 5000); // Change slide every 5 seconds
+            }
+        };
+
+        // Clear existing interval before setting a new one
+        if (autoSlideIntervalRef.current) {
+            clearInterval(autoSlideIntervalRef.current);
+        }
+
+        startAutoSlide();
+
+        // Cleanup function
+        return () => {
+            if (autoSlideIntervalRef.current) {
+                clearInterval(autoSlideIntervalRef.current);
+            }
+        };
+    }, [isAutoSliding, isPaused, canScrollRight, featuredProjects.length]);
+
+    // Reset pause state after 10 seconds of inactivity
+    useEffect(() => {
+        if (isPaused) {
+            const resetPauseTimeout = setTimeout(() => {
+                setIsPaused(false);
+            }, 10000);
+
+            return () => clearTimeout(resetPauseTimeout);
+        }
+    }, [isPaused]);
+
+    // Toggle auto-sliding
+    const toggleAutoSlide = () => {
+        setIsAutoSliding(!isAutoSliding);
+        setIsPaused(false);
+    };
+
     // Handle project click to show details
     const handleProjectClick = (project) => {
         setSelectedProject(project);
+        // Pause auto-sliding when viewing details
+        setIsPaused(true);
         // Add a class to body to prevent scrolling when modal is open
         document.body.classList.add("overflow-hidden");
     };
@@ -58,6 +150,27 @@ export default function FeaturedProjects() {
         setSelectedProject(null);
         // Remove the class to re-enable scrolling
         document.body.classList.remove("overflow-hidden");
+    };
+
+    // Programmatically scroll to specific index
+    const scrollToIndex = (index) => {
+        const el = scrollContainerRef.current;
+        if (el) {
+            // Calculate the position to scroll to
+            const cardWidth = el.scrollWidth / featuredProjects.length;
+            const scrollPos = index * cardWidth;
+
+            // Scroll to the position
+            el.scrollTo({ left: scrollPos, behavior: "smooth" });
+
+            // Update current index
+            setCurrentIndex(index);
+            // Temporarily pause auto-sliding
+            setIsPaused(true);
+
+            // Update scroll indicators
+            setTimeout(checkScrollability, 300);
+        }
     };
 
     return (
@@ -92,26 +205,49 @@ export default function FeaturedProjects() {
 
                 {/* Projects Container with Horizontal Scroll on Mobile/Tablet */}
                 <div className="relative">
-                    {/* Scroll Buttons (hanya muncul jika perlu) */}
-                    {canScrollLeft && (
-                        <button
-                            onClick={() => handleScroll("left")}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 lg:hidden"
-                            aria-label="Scroll left"
-                        >
-                            <FaChevronLeft />
-                        </button>
-                    )}
+                    {/* Scroll Buttons (always visible now) */}
+                    <button
+                        onClick={() => handleScroll("left")}
+                        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 transition-opacity duration-300 ${
+                            !canScrollLeft
+                                ? "opacity-50 cursor-not-allowed"
+                                : "opacity-100 hover:bg-black/70"
+                        }`}
+                        aria-label="Scroll left"
+                        disabled={!canScrollLeft}
+                    >
+                        <FaChevronLeft />
+                    </button>
 
-                    {canScrollRight && (
-                        <button
-                            onClick={() => handleScroll("right")}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 lg:hidden"
-                            aria-label="Scroll right"
-                        >
-                            <FaChevronRight />
-                        </button>
-                    )}
+                    <button
+                        onClick={() => handleScroll("right")}
+                        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 transition-opacity duration-300 ${
+                            !canScrollRight
+                                ? "opacity-50 cursor-not-allowed"
+                                : "opacity-100 hover:bg-black/70"
+                        }`}
+                        aria-label="Scroll right"
+                        disabled={!canScrollRight}
+                    >
+                        <FaChevronRight />
+                    </button>
+
+                    {/* Play/Pause Button */}
+                    <button
+                        onClick={toggleAutoSlide}
+                        className="absolute -bottom-12 right-0 z-10 bg-black/50 backdrop-blur-sm p-2 rounded-full text-white shadow-lg border border-gray-700 hover:bg-black/70"
+                        aria-label={
+                            isAutoSliding
+                                ? "Pause auto-slide"
+                                : "Play auto-slide"
+                        }
+                    >
+                        {isAutoSliding ? (
+                            <FaPause size={14} />
+                        ) : (
+                            <FaPlay size={14} />
+                        )}
+                    </button>
 
                     {/* Projects Grid for Desktop / Scrollable Container for Mobile */}
                     <div
@@ -131,6 +267,22 @@ export default function FeaturedProjects() {
                                     featured={true}
                                 />
                             </div>
+                        ))}
+                    </div>
+
+                    {/* Slide indicators/dots */}
+                    <div className="flex justify-center mt-6 gap-2">
+                        {featuredProjects.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => scrollToIndex(index)}
+                                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                                    currentIndex === index
+                                        ? "bg-cyan-500 w-5"
+                                        : "bg-gray-600 hover:bg-gray-500"
+                                }`}
+                                aria-label={`Go to slide ${index + 1}`}
+                            />
                         ))}
                     </div>
                 </div>

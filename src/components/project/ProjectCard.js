@@ -1,15 +1,16 @@
 // src/components/common/ProjectCard.js
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
     FaChevronLeft,
     FaChevronRight,
-    FaChevronUp,
     FaExternalLinkAlt,
     FaGithub,
     FaStar,
+    FaPause,
+    FaPlay,
 } from "react-icons/fa";
 import TechBadge from "@/components/TechBadge";
 import ProjectTag from "@/components/ProjectTag";
@@ -32,6 +33,9 @@ export default function ProjectCard({
     const [isHovered, setIsHovered] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isPaused, setIsPaused] = useState(false);
+    const [showControls, setShowControls] = useState(false);
+    const autoPlayIntervalRef = useRef(null);
 
     const {
         title,
@@ -63,16 +67,76 @@ export default function ProjectCard({
         );
     };
 
-    // Auto-play carousel when hovered
+    // Auto-play carousel
     useEffect(() => {
-        let interval;
-        if (isHovered && isAutoPlaying && images.length > 1) {
-            interval = setInterval(() => {
-                nextImage();
-            }, 3000); // Change image every 3 seconds
+        // Don't auto-play if there's only one image
+        if (images.length <= 1) return;
+
+        // Setup auto-play functionality
+        const startAutoPlay = () => {
+            if (isAutoPlaying && !isPaused) {
+                autoPlayIntervalRef.current = setInterval(
+                    () => {
+                        nextImage();
+                    },
+                    featured ? 4000 : 5000
+                ); // Different timing for featured vs regular cards
+            }
+        };
+
+        // Clear existing interval before setting a new one
+        if (autoPlayIntervalRef.current) {
+            clearInterval(autoPlayIntervalRef.current);
         }
-        return () => clearInterval(interval);
-    }, [isHovered, isAutoPlaying, images.length]);
+
+        startAutoPlay();
+
+        // Cleanup function
+        return () => {
+            if (autoPlayIntervalRef.current) {
+                clearInterval(autoPlayIntervalRef.current);
+            }
+        };
+    }, [isAutoPlaying, isPaused, images.length, featured]);
+
+    // Reset pause state after some inactivity
+    useEffect(() => {
+        if (isPaused) {
+            const pauseTimeout = setTimeout(() => {
+                setIsPaused(false);
+            }, 8000); // Resume auto-play after 8 seconds of inactivity
+
+            return () => clearTimeout(pauseTimeout);
+        }
+    }, [isPaused]);
+
+    // Show controls when hovered
+    useEffect(() => {
+        if (isHovered) {
+            setShowControls(true);
+        } else {
+            // Add a small delay before hiding controls
+            const hideTimeout = setTimeout(() => {
+                setShowControls(false);
+            }, 1000);
+
+            return () => clearTimeout(hideTimeout);
+        }
+    }, [isHovered]);
+
+    // Toggle auto-play
+    const toggleAutoPlay = (e) => {
+        e.stopPropagation();
+        setIsAutoPlaying(!isAutoPlaying);
+        setIsPaused(false);
+    };
+
+    // Go to specific image
+    const goToImage = (idx, e) => {
+        if (e) e.stopPropagation();
+        setCurrentImageIndex(idx);
+        setIsPaused(true);
+    };
 
     // Conditional styling based on whether this is a featured project or in the projects grid
     const cardStyle = featured
@@ -167,50 +231,59 @@ export default function ProjectCard({
                             }
                         />
 
-                        {/* Image Navigation Controls - Only show when multiple images and hovered */}
-                        {images.length > 1 && isHovered && (
+                        {/* Image Navigation Controls - Only show when multiple images and controls should be visible */}
+                        {images.length > 1 && (showControls || isHovered) && (
                             <>
                                 <button
-                                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-transform duration-200 transform hover:scale-110"
+                                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-all duration-200 transform hover:scale-110"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         prevImage();
-                                        setIsAutoPlaying(false);
+                                        setIsPaused(true);
                                     }}
                                 >
                                     <FaChevronLeft size={12} />
                                 </button>
                                 <button
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-transform duration-200 transform hover:scale-110"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-all duration-200 transform hover:scale-110"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         nextImage();
-                                        setIsAutoPlaying(false);
+                                        setIsPaused(true);
                                     }}
                                 >
                                     <FaChevronRight size={12} />
                                 </button>
 
+                                {/* Play/Pause Button */}
+                                <button
+                                    className="absolute top-2 right-2 bg-black/60 hover:bg-black/70 rounded-full p-1.5 z-20 text-white backdrop-blur-sm transition-all duration-200 transform hover:scale-110"
+                                    onClick={toggleAutoPlay}
+                                >
+                                    {isAutoPlaying && !isPaused ? (
+                                        <FaPause size={10} />
+                                    ) : (
+                                        <FaPlay size={10} />
+                                    )}
+                                </button>
+
                                 {/* Image indicator dots */}
-                                {images.length > 1 && (
-                                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
-                                        {images.map((_, idx) => (
-                                            <button
-                                                key={idx}
-                                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                                                    currentImageIndex === idx
-                                                        ? "bg-white w-3"
-                                                        : "bg-white/50"
-                                                }`}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setCurrentImageIndex(idx);
-                                                    setIsAutoPlaying(false);
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
+                                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
+                                    {images.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                                currentImageIndex === idx
+                                                    ? "bg-white w-3"
+                                                    : "bg-white/50 hover:bg-white/70"
+                                            }`}
+                                            onClick={(e) => goToImage(idx, e)}
+                                            aria-label={`Go to image ${
+                                                idx + 1
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
                             </>
                         )}
                     </div>
