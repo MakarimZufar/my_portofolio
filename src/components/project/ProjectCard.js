@@ -26,13 +26,22 @@ import ProjectTag from "@/components/ProjectTag";
  */
 const renderMedia = (mediaUrl) => {
     if (mediaUrl.includes("youtube.com") || mediaUrl.includes("youtu.be")) {
-        const videoId = mediaUrl.split("v=")[1]?.split("&")[0] || mediaUrl.split("youtu.be/")[1];
+        const videoId =
+            mediaUrl.split("v=")[1]?.split("&")[0] ||
+            mediaUrl.split("youtu.be/")[1];
         return (
             <div className="relative w-full h-full">
                 {/* Custom overlay to prevent YouTube title from showing */}
-                <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }}></div>
+                <div
+                    className="absolute inset-0 z-10"
+                    style={{ pointerEvents: "none" }}
+                ></div>
                 <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&modestbranding=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&origin=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin : '')}&enablejsapi=1&version=3&playerapiid=ytplayer`}
+                    src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&modestbranding=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&origin=${encodeURIComponent(
+                        typeof window !== "undefined"
+                            ? window.location.origin
+                            : ""
+                    )}&enablejsapi=1&version=3&playerapiid=ytplayer`}
                     frameBorder="0"
                     allow="autoplay; encrypted-media"
                     allowFullScreen
@@ -45,8 +54,9 @@ const renderMedia = (mediaUrl) => {
         <Image
             src={mediaUrl}
             alt="Project media"
-            layout="fill"
-            objectFit="cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            style={{ objectFit: "cover" }}
             className="rounded-lg"
         />
     );
@@ -225,8 +235,7 @@ export default function ProjectCard({
                                 style={{
                                     width: `${media.length * 100}%`,
                                     transform: `translateX(-${
-                                        (currentMediaIndex * 100) /
-                                        media.length
+                                        (currentMediaIndex * 100) / media.length
                                     }%)`,
                                 }}
                             >
