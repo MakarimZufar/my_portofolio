@@ -186,7 +186,7 @@ export default function FeaturedProjects() {
                         className="inline-block"
                     >
                         <h2 className="text-3xl font-bold mb-2 text-cyan-400">
-                            Proyek Unggulan
+                            Featured Projects
                         </h2>
                         <div className="h-1 w-24 mx-auto bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" />
                     </motion.div>
@@ -198,8 +198,8 @@ export default function FeaturedProjects() {
                         transition={{ delay: 0.2, duration: 0.5 }}
                         className="mt-4 text-gray-400 max-w-2xl mx-auto"
                     >
-                        Beberapa proyek terbaik yang telah saya kerjakan,
-                        menggabungkan teknologi modern dan solusi inovatif.
+                        Some of my best projects, combining modern technologies
+                        and innovative solutions.
                     </motion.p>
                 </div>
 
@@ -293,7 +293,7 @@ export default function FeaturedProjects() {
                         href="/projects"
                         className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-full font-medium hover:from-cyan-500 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-cyan-500/20"
                     >
-                        <span>Lihat Semua Proyek</span>
+                        <span>View All Projects</span>
                         <FaArrowRight />
                     </Link>
                 </div>

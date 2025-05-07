@@ -131,17 +131,17 @@ const UnderConstructionNotifications = () => {
                                 )}
                                 <h3 className="font-bold text-lg text-red-500 mb-1 flex items-center">
                                     <FaExclamationTriangle className="mr-1" />{" "}
-                                    BAHAYA KRITIS
+                                    CRITICAL DANGER
                                 </h3>
                                 <p className="font-mono leading-tight">
-                                    JANGAN PERNAH COBA
+                                    NEVER ATTEMPT
                                 </p>
                                 <p className="font-mono font-bold leading-tight">
-                                    MENGAKSES HALAMAN 404
+                                    TO ACCESS 404 PAGE
                                 </p>
                                 <div className="mt-1 text-xs bg-red-900 p-1 rounded">
                                     <span className="text-yellow-300">
-                                        Risiko tinggi: corrupted data
+                                        High risk: corrupted data
                                     </span>
                                 </div>
                             </div>
@@ -200,13 +200,13 @@ const UnderConstructionNotifications = () => {
                                     <div className="absolute inset-0 bg-yellow-500 opacity-10 animate-pulse"></div>
                                 )}
                                 <h3 className="font-bold text-lg text-yellow-400 mb-1 flex items-center">
-                                    <FaBan className="mr-1" /> PERINGATAN SISTEM
+                                    <FaBan className="mr-1" /> SYSTEM WARNING
                                 </h3>
                                 <p className="font-mono leading-tight">
-                                    HALAMAN 404 TERDETEKSI
+                                    404 PAGE DETECTED
                                 </p>
                                 <p className="font-mono font-bold leading-tight">
-                                    SEGERA ABAIKAN
+                                    IGNORE IMMEDIATELY
                                 </p>
                                 <div className="mt-1 text-xs bg-black p-1 rounded flex items-center">
                                     <span className="text-red-500 animate-pulse">
@@ -295,11 +295,11 @@ const UnderConstructionNotifications = () => {
                             </motion.div>
                             <div>
                                 <h2 className="text-black font-extrabold text-2xl flex items-center">
-                                    <FaExclamation className="mr-2" /> SEDANG
-                                    DALAM KONSTRUKSI
+                                    <FaExclamation className="mr-2" /> UNDER
+                                    CONSTRUCTION
                                 </h2>
                                 <p className="text-gray-800 font-semibold">
-                                    Halaman ini masih dalam tahap pengembangan
+                                    This page is still in development
                                 </p>
                             </div>
                         </div>
@@ -337,14 +337,12 @@ const UnderConstructionNotifications = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-lg text-gray-800 dark:text-white">
-                                            Apa yang Sedang Kami Kerjakan?
+                                            What Are We Working On?
                                         </h3>
                                         <p className="text-gray-600 dark:text-gray-300">
-                                            Tim developer kami sedang
-                                            memperbarui halaman ini dengan
-                                            fitur-fitur baru yang akan
-                                            meningkatkan pengalaman pengguna
-                                            Anda.
+                                            Our development team is updating
+                                            this page with new features that
+                                            will enhance your user experience.
                                         </p>
                                     </div>
                                 </div>
@@ -355,12 +353,12 @@ const UnderConstructionNotifications = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-lg text-gray-800 dark:text-white">
-                                            Kapan Selesai?
+                                            When Will It Be Finished?
                                         </h3>
                                         <p className="text-gray-600 dark:text-gray-300">
-                                            Kami berencana menyelesaikan
-                                            konstruksi ini dalam beberapa hari.
-                                            Terima kasih atas kesabaran Anda!
+                                            We plan to complete this
+                                            construction in a few days. Thank
+                                            you for your patience!
                                         </p>
                                     </div>
                                 </div>
@@ -371,13 +369,12 @@ const UnderConstructionNotifications = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-lg text-gray-800 dark:text-white">
-                                            Fitur yang Akan Datang
+                                            Upcoming Features
                                         </h3>
                                         <p className="text-gray-600 dark:text-gray-300">
-                                            Antarmuka yang lebih intuitif,
-                                            kecepatan loading yang lebih baik,
-                                            dan fungsionalitas baru yang akan
-                                            memukau Anda.
+                                            A more intuitive interface, faster
+                                            loading times, and new functionality
+                                            that will impress you.
                                         </p>
                                     </div>
                                 </div>
@@ -410,7 +407,7 @@ const UnderConstructionNotifications = () => {
                                         whileTap={{ scale: 0.95 }}
                                     >
                                         <FaHome />
-                                        <span>Kembali ke Halaman Utama</span>
+                                        <span>Back to Home Page</span>
                                     </motion.a>
                                 </div>
                             </div>
