@@ -24,6 +24,30 @@ import ProjectTag from "@/components/ProjectTag";
  * @param {Boolean} featured - Whether this is a featured project display (different styling)
  * @returns {JSX.Element}
  */
+const renderMedia = (mediaUrl) => {
+    if (mediaUrl.includes("youtube.com") || mediaUrl.includes("youtu.be")) {
+        const videoId = mediaUrl.split("v=")[1]?.split("&")[0] || mediaUrl.split("youtu.be/")[1];
+        return (
+            <iframe
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}`}
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                className="w-full h-full rounded-lg"
+            ></iframe>
+        );
+    }
+    return (
+        <Image
+            src={mediaUrl}
+            alt="Project media"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg"
+        />
+    );
+};
+
 export default function ProjectCard({
     project,
     index,
@@ -31,7 +55,7 @@ export default function ProjectCard({
     featured = false,
 }) {
     const [isHovered, setIsHovered] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const [isPaused, setIsPaused] = useState(false);
     const [showControls, setShowControls] = useState(false);
@@ -49,35 +73,35 @@ export default function ProjectCard({
     } = project;
 
     // Handle single image or array of images
-    const images = Array.isArray(imageUrls)
+    const media = Array.isArray(imageUrls)
         ? imageUrls
         : imageUrls
         ? [imageUrls]
         : ["/projects/default-project.jpg"];
 
-    // Function to go to next image
-    const nextImage = () => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    // Function to go to next media
+    const nextMedia = () => {
+        setCurrentMediaIndex((prev) => (prev + 1) % media.length);
     };
 
-    // Function to go to previous image
-    const prevImage = () => {
-        setCurrentImageIndex(
-            (prev) => (prev - 1 + images.length) % images.length
+    // Function to go to previous media
+    const prevMedia = () => {
+        setCurrentMediaIndex(
+            (prev) => (prev - 1 + media.length) % media.length
         );
     };
 
     // Auto-play carousel
     useEffect(() => {
-        // Don't auto-play if there's only one image
-        if (images.length <= 1) return;
+        // Don't auto-play if there's only one media
+        if (media.length <= 1) return;
 
         // Setup auto-play functionality
         const startAutoPlay = () => {
             if (isAutoPlaying && !isPaused) {
                 autoPlayIntervalRef.current = setInterval(
                     () => {
-                        nextImage();
+                        nextMedia();
                     },
                     featured ? 4000 : 5000
                 ); // Different timing for featured vs regular cards
@@ -97,7 +121,7 @@ export default function ProjectCard({
                 clearInterval(autoPlayIntervalRef.current);
             }
         };
-    }, [isAutoPlaying, isPaused, images.length, featured]);
+    }, [isAutoPlaying, isPaused, media.length, featured]);
 
     // Reset pause state after some inactivity
     useEffect(() => {
@@ -131,10 +155,10 @@ export default function ProjectCard({
         setIsPaused(false);
     };
 
-    // Go to specific image
-    const goToImage = (idx, e) => {
+    // Go to specific media
+    const goToMedia = (idx, e) => {
         if (e) e.stopPropagation();
-        setCurrentImageIndex(idx);
+        setCurrentMediaIndex(idx);
         setIsPaused(true);
     };
 
@@ -175,7 +199,7 @@ export default function ProjectCard({
                         : "relative h-full rounded-2xl bg-gradient-to-br from-black/80 to-gray-900/90 p-5 backdrop-blur-md z-10 overflow-hidden"
                 }
             >
-                {/* Image Container */}
+                {/* Media Container */}
                 <div
                     className={
                         featured
@@ -195,34 +219,28 @@ export default function ProjectCard({
                             <div
                                 className="flex transition-transform duration-500 h-full"
                                 style={{
-                                    width: `${images.length * 100}%`,
+                                    width: `${media.length * 100}%`,
                                     transform: `translateX(-${
-                                        (currentImageIndex * 100) /
-                                        images.length
+                                        (currentMediaIndex * 100) /
+                                        media.length
                                     }%)`,
                                 }}
                             >
-                                {images.map((img, idx) => (
+                                {media.map((mediaUrl, idx) => (
                                     <div
                                         key={idx}
                                         className="relative"
                                         style={{
-                                            width: `${100 / images.length}%`,
+                                            width: `${100 / media.length}%`,
                                         }}
                                     >
-                                        <Image
-                                            src={img}
-                                            alt={`${title} - image ${idx + 1}`}
-                                            className="object-cover w-full h-full transform transition-transform duration-500 ease-out group-hover:scale-110"
-                                            width={500}
-                                            height={300}
-                                        />
+                                        {renderMedia(mediaUrl)}
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Gradient overlay for image */}
+                        {/* Gradient overlay for media */}
                         <div
                             className={
                                 featured
@@ -231,14 +249,14 @@ export default function ProjectCard({
                             }
                         />
 
-                        {/* Image Navigation Controls - Only show when multiple images and controls should be visible */}
-                        {images.length > 1 && (showControls || isHovered) && (
+                        {/* Media Navigation Controls - Only show when multiple media and controls should be visible */}
+                        {media.length > 1 && (showControls || isHovered) && (
                             <>
                                 <button
                                     className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-all duration-200 transform hover:scale-110"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        prevImage();
+                                        prevMedia();
                                         setIsPaused(true);
                                     }}
                                 >
@@ -248,7 +266,7 @@ export default function ProjectCard({
                                     className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-all duration-200 transform hover:scale-110"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        nextImage();
+                                        nextMedia();
                                         setIsPaused(true);
                                     }}
                                 >
@@ -267,18 +285,18 @@ export default function ProjectCard({
                                     )}
                                 </button>
 
-                                {/* Image indicator dots */}
+                                {/* Media indicator dots */}
                                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
-                                    {images.map((_, idx) => (
+                                    {media.map((_, idx) => (
                                         <button
                                             key={idx}
                                             className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                                                currentImageIndex === idx
+                                                currentMediaIndex === idx
                                                     ? "bg-white w-3"
                                                     : "bg-white/50 hover:bg-white/70"
                                             }`}
-                                            onClick={(e) => goToImage(idx, e)}
-                                            aria-label={`Go to image ${
+                                            onClick={(e) => goToMedia(idx, e)}
+                                            aria-label={`Go to media ${
                                                 idx + 1
                                             }`}
                                         />
