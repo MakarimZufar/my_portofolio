@@ -1,9 +1,11 @@
 // src/components/common/ProjectCard.js
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
+    FaChevronLeft,
+    FaChevronRight,
     FaChevronUp,
     FaExternalLinkAlt,
     FaGithub,
@@ -28,17 +30,49 @@ export default function ProjectCard({
     featured = false,
 }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
     const {
         title,
         description,
-        imageUrl,
+        imageUrls, // Changed from imageUrl to imageUrls (array)
         tags,
         technologies,
         emoji,
         githubUrl,
         demoUrl,
     } = project;
+
+    // Handle single image or array of images
+    const images = Array.isArray(imageUrls)
+        ? imageUrls
+        : imageUrls
+        ? [imageUrls]
+        : ["/projects/default-project.jpg"];
+
+    // Function to go to next image
+    const nextImage = () => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    };
+
+    // Function to go to previous image
+    const prevImage = () => {
+        setCurrentImageIndex(
+            (prev) => (prev - 1 + images.length) % images.length
+        );
+    };
+
+    // Auto-play carousel when hovered
+    useEffect(() => {
+        let interval;
+        if (isHovered && isAutoPlaying && images.length > 1) {
+            interval = setInterval(() => {
+                nextImage();
+            }, 3000); // Change image every 3 seconds
+        }
+        return () => clearInterval(interval);
+    }, [isHovered, isAutoPlaying, images.length]);
 
     // Conditional styling based on whether this is a featured project or in the projects grid
     const cardStyle = featured
@@ -92,17 +126,37 @@ export default function ProjectCard({
                                 : "relative w-full h-full"
                         }
                     >
-                        <Image
-                            src={imageUrl || "/projects/default-project.jpg"}
-                            alt={title}
-                            className={
-                                featured
-                                    ? "object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-500"
-                                    : "w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                            }
-                            width={500}
-                            height={300}
-                        />
+                        {/* Carousel Implementation */}
+                        <div className="relative w-full h-full overflow-hidden">
+                            <div
+                                className="flex transition-transform duration-500 h-full"
+                                style={{
+                                    width: `${images.length * 100}%`,
+                                    transform: `translateX(-${
+                                        (currentImageIndex * 100) /
+                                        images.length
+                                    }%)`,
+                                }}
+                            >
+                                {images.map((img, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="relative"
+                                        style={{
+                                            width: `${100 / images.length}%`,
+                                        }}
+                                    >
+                                        <Image
+                                            src={img}
+                                            alt={`${title} - image ${idx + 1}`}
+                                            className="object-cover w-full h-full transform transition-transform duration-500 ease-out group-hover:scale-110"
+                                            width={500}
+                                            height={300}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
                         {/* Gradient overlay for image */}
                         <div
@@ -112,6 +166,53 @@ export default function ProjectCard({
                                     : "absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"
                             }
                         />
+
+                        {/* Image Navigation Controls - Only show when multiple images and hovered */}
+                        {images.length > 1 && isHovered && (
+                            <>
+                                <button
+                                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-transform duration-200 transform hover:scale-110"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        prevImage();
+                                        setIsAutoPlaying(false);
+                                    }}
+                                >
+                                    <FaChevronLeft size={12} />
+                                </button>
+                                <button
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 z-20 text-white backdrop-blur-sm transition-transform duration-200 transform hover:scale-110"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        nextImage();
+                                        setIsAutoPlaying(false);
+                                    }}
+                                >
+                                    <FaChevronRight size={12} />
+                                </button>
+
+                                {/* Image indicator dots */}
+                                {images.length > 1 && (
+                                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
+                                        {images.map((_, idx) => (
+                                            <button
+                                                key={idx}
+                                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                                    currentImageIndex === idx
+                                                        ? "bg-white w-3"
+                                                        : "bg-white/50"
+                                                }`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setCurrentImageIndex(idx);
+                                                    setIsAutoPlaying(false);
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
 
                     {/* Project Tags */}
