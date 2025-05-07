@@ -3,132 +3,95 @@ import { technologies, getTechnology } from "./technologiesData";
 
 const projects = [
     {
-        id: "weather-app",
-        title: "Weather App",
+        id: "sijarta-app",
+        title: "Sijarta App",
         description:
-            "Aplikasi cuaca yang menampilkan ramalan real-time dengan antarmuka yang responsif dan animasi transisi cuaca yang menarik.",
+            "A web application for service bookings that I developed with my teammates as part of my Database course project.",
         imageUrls: [
-            "/projects/weather-app.jpg",
-            "/projects/weather-app-2.jpg",
-            "/projects/weather-app-3.jpg",
+            "/projects/sijarta1.jpg",
+            "/projects/sijarta2.jpg",
+            "/projects/sijarta3.jpg",
+            "/projects/sijarta4.jpg",
+            "/projects/sijarta5.jpg",
+            "/projects/sijarta6.jpg",
+            "/projects/sijarta7.jpg",
+            "/projects/sijarta8.jpg",
         ],
-        tags: ["Web", "Frontend"],
-        technologies: [
-            "React",
-            "OpenWeather API",
-            "Tailwind CSS",
-            "Framer Motion",
-        ],
+        tags: ["Web", "Full Stack"],
+        technologies: ["Django", "Tailwind CSS", "PostgreSQL"],
         featured: true,
-        emoji: "🌦️", // Emoji kustom untuk proyek ini
-        githubUrl: "https://github.com/MakarimZufar/weather-app",
-        demoUrl: "https://weather-app-makarim.vercel.app",
+        emoji: "🤝", // Handshake emoji representing service booking
+        githubUrl: "https://github.com/MakarimZufar/BASDAT_SIJARTA",
+        demoUrl: "https://sijarta-production.up.railway.app/",
     },
     {
         id: "my_portfolio",
         title: "My Portfolio Website",
         description:
-            "Website portofolio pribadi yang dibangun dengan Next.js dan Tailwind CSS, menampilkan proyek-proyek dan kemampuan teknis secara interaktif.",
-        imageUrls: ["/projects/portfolio.jpg", "/projects/portfolio-2.jpg"],
+            "Personal portfolio website built with Next.js and Tailwind CSS, showcasing projects and technical skills in an interactive way.",
+        imageUrls: [
+            "/projects/portfolio.jpg", 
+            "/projects/portofolio2.jpg",
+            "/projects/portofolio3.png",
+        ],
         tags: ["Web", "Frontend", "UI"],
         technologies: ["Next.js", "Tailwind CSS", "Framer Motion", "React"],
         featured: true,
-        emoji: "👨‍💻", // Emoji kustom untuk proyek ini
+        emoji: "👨‍💻", // Custom emoji for this project
         githubUrl: "https://github.com/MakarimZufar/my_portofolio",
         demoUrl: "https://makarimzufar.vercel.app",
     },
     {
-        id: "blog-platform",
-        title: "Platform Blog",
+        id: "roso-jogja",
+        title: "Roso Jogja Web and Mobile",
         description:
-            "Platform blog dengan fitur autentikasi, editor teks kaya, komentar, dan analitik. Mendukung markdown dan penyimpanan gambar.",
+            "RosoJogja is a culinary application specifically designed to help you find and order food or drinks from various restaurants in Yogyakarta. With an intuitive interface, RosoJogja makes it easy to search for restaurants, view menus, and order food or drinks.",
         imageUrls: [
-            "/projects/blog-platform.jpg",
-            "/projects/blog-platform-2.jpg",
-            "/projects/blog-platform-3.jpg",
+            "https://www.youtube.com/watch?v=gvJ41rK6REs&ab_channel=AkhdanTaufiq",
         ],
-        tags: ["Web", "Full Stack"],
-        technologies: ["Next.js", "MongoDB", "Tailwind CSS", "NextAuth.js"],
+        tags: ["Web", "Full Stack", "Mobile"],
+        technologies: ["Tailwind CSS", "Django Rest Framework", "Flutter"],
         featured: true,
-        emoji: "✍️", // Emoji kustom untuk proyek ini
-        githubUrl: "https://github.com/MakarimZufar/blog-platform",
-        demoUrl: "https://blog-platform-demo.vercel.app",
-    },
-    {
-        id: "task-manager",
-        title: "Aplikasi Manajemen Tugas",
-        description:
-            "Aplikasi manajemen tugas dan produktivitas dengan fitur kategori, prioritas, notifikasi, dan integrasi kalender.",
-        imageUrls: ["/projects/task-manager.jpg"],
-        tags: ["Web", "Full Stack"],
-        technologies: ["React", "Firebase", "Tailwind CSS", "Redux"],
-        featured: false,
-        // Tidak ada emoji kustom, akan menggunakan emoji berdasarkan tag
-        githubUrl: "https://github.com/MakarimZufar/task-manager",
-        demoUrl: "https://task-manager-zufar.vercel.app",
-    },
-    {
-        id: "e-commerce",
-        title: "Platform E-Commerce",
-        description:
-            "Platform e-commerce dengan sistem keranjang, checkout, pembayaran, dan manajemen produk untuk berbagai kategori barang.",
-        imageUrls: ["/projects/e-commerce.jpg", "/projects/e-commerce-2.jpg"],
-        tags: ["Web", "Full Stack"],
-        technologies: ["Next.js", "Node.js", "MongoDB", "Stripe API"],
-        featured: false,
-        emoji: "🛒", // Emoji kustom untuk proyek ini
-        githubUrl: "https://github.com/MakarimZufar/e-commerce",
-        demoUrl: "https://e-commerce-zufar.vercel.app",
-    },
-    {
-        id: "chat-app",
-        title: "Aplikasi Chat Realtime",
-        description:
-            "Aplikasi chat realtime dengan fitur grup, obrolan pribadi, berbagi file, dan notifikasi push.",
-        imageUrls: ["/projects/chat-app.jpg", "/projects/chat-app-2.jpg"],
-        tags: ["Web", "Mobile", "Full Stack"],
-        technologies: ["React", "Firebase", "WebSockets", "Redux"],
-        featured: false,
-        emoji: "💬", // Emoji kustom untuk proyek ini
-        githubUrl: "https://github.com/MakarimZufar/chat-app",
-        demoUrl: "https://chat-app-zufar.vercel.app",
+        emoji: "🍽️", // Food and dining emoji for culinary app
+        githubUrl: "https://github.com/MakarimZufar/roso-jogja-mobile",
+        demoUrl: "rosojogja.sijarta-ltb.site",
     },
 ];
 
-// Fungsi untuk mendapatkan semua proyek
+// Function to get all projects
 export const getAllProjects = () => projects;
 
-// Fungsi untuk mendapatkan proyek tertentu berdasarkan ID
+// Function to get a specific project by ID
 export const getProjectById = (id) =>
     projects.find((project) => project.id === id);
 
-// Fungsi untuk mendapatkan proyek-proyek unggulan
+// Function to get featured projects
 export const getFeaturedProjects = () =>
     projects.filter((project) => project.featured);
 
-// Fungsi untuk mendapatkan semua tags unik
+// Function to get all unique tags
 export const getAllTags = () => {
     const allTags = projects.flatMap((project) => project.tags);
     return [...new Set(allTags)];
 };
 
-// Fungsi untuk mendapatkan semua teknologi unik dari proyek-proyek
+// Function to get all unique technologies from projects
 export const getAllTechnologies = () => {
     const allTechnologies = projects.flatMap((project) => project.technologies);
     return [...new Set(allTechnologies)];
 };
 
-// Fungsi untuk memeriksa apakah teknologi ada dalam file technologiesData
+// Function to check if technology exists in technologiesData file
 export const validateTechnology = (techName) => {
     return Boolean(getTechnology(techName));
 };
 
-// Fungsi untuk mendapatkan detail teknologi untuk sebuah proyek
+// Function to get technology details for a project
 export const getProjectTechnologies = (project) => {
     return project.technologies.map((techName) => getTechnology(techName));
 };
 
-// Pemetaan emoji default berdasarkan tag
+// Default emoji mapping based on tag
 export const tagEmojiMap = {
     Web: "💻",
     Frontend: "🎨",
